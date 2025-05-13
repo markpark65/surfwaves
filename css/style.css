@@ -1,0 +1,122 @@
+/* General Reset */
+body, h1, h2, p, ul, li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+/* Container */
+.container {
+    width: 80%; /* 중앙에 위치하도록 너비 설정 */
+    max-width: 1200px; /* 최대 너비를 제한 */
+    margin: 0 auto; /* 양옆에 흰색 여백 생성 */
+}
+
+/* Header */
+header {
+    background-color: #005f73;
+    color: white;
+    padding: 1rem 0;
+}
+
+header .logo h1 {
+    font-size: 1.5rem;
+}
+
+header nav ul {
+    display: flex;
+    gap: 2rem;
+    justify-content: flex-end;
+}
+
+header nav ul li a {
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+/* Hero Section */
+#hero {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+#hero img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+#hero .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Dark transparent overlay */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.6); /* Text shadow for clarity */
+}
+
+#hero p {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+#hero .search-container {
+    display: flex;
+    gap: 1rem;
+}
+
+#hero input[type="date"] {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+}
+
+#hero button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    color: white;
+    background-color: #0077b6;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#hero button:hover {
+    background-color: #005f73;
+}
+
+/* Section Styling */
+section {
+    padding: 2rem 0;
+    text-align: center;
+}
+
+#locations, #weather {
+    background-color: #e9d8a6;
+    margin-top: 1rem;
+}
+
+/* Footer */
+footer {
+    background-color: #005f73;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+}
