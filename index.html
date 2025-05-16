@@ -1,23 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surf Info</title>
+    <title>Surfly</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
 </head>
 <body>
     <header>
         <div class="container">
             <div class="logo">
-                <h1>SurfInfo</h1>
+                <h1><a href="index.html" style="color:inherit;text-decoration:none;">Surfly</a></h1>
             </div>
             <nav>
                 <ul>
                     <li><a href="index.html">홈</a></li>
-                    <li><a href="about.html">정보</a></li>
-                    <li><a href="#locations">숙소 예약</a></li>
-                    <li><a href="#weather">날씨</a></li>
+                    <li><a href="recommend.html">추천</a></li>
+                    <li><a href="commu.html">후기</a></li>
+                    <li><a href="about.html">문의</a></li>
                 </ul>
             </nav>
         </div>
@@ -27,16 +30,27 @@
         <section id="hero">
             <div class="container">
                 <div class="overlay">
-                    <h1>파도정보와 날씨</h1>
-                    <p>최적의 서핑 장소 및 날짜를 확인하세요</p>
+                    <div class="overlay-content">
+                        <h1>파도정보와 날씨</h1>
+                        <p>최적의 서핑 장소 및 날짜를 확인하세요</p>
+                    </div>
                     <div class="search-container">
-                        <input type="date" id="surf-date" />
-                        <button id="search-button">검색하기</button>
+                        <div id="calendar"></div>
                     </div>
                 </div>
                 <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Beautiful Surfing Beach" />
             </div>
         </section>
+
+        <!-- 추천 팝업 -->
+        <div class="recommend-popup" id="recommendPopup">
+            <h3>추천 서핑 스팟</h3>
+            <ul id="recommendList">
+                <!-- 추후js -->
+            </ul>
+            <button class="close-btn" onclick="closePopup()">닫기</button>
+        </div>
+        <div id="popupBg"></div>
 
         <!-- Surfing Locations Section -->
         <section id="locations">
@@ -56,8 +70,38 @@
     </main>
     <footer>
         <div class="container">
-            <p>© 2025 Surf Info. All rights reserved.</p>
+            <p>© 2025 Surfly. All rights reserved.</p>
         </div>
     </footer>
+    <script>
+        flatpickr("#calendar", {
+            locale: "ko",
+            dateFormat: "Y-m-d",
+            inline: true,
+            onChange: function(selectedDates, dateStr, instance) {
+                if (dateStr) {
+                    const recommendPopup = document.getElementById('recommendPopup');
+                    const popupBg = document.getElementById('popupBg');
+                    const recommendList = document.getElementById('recommendList');
+                    const places = [
+                        { name: '1등 추천: A 해수욕장', url: 'a.html' },
+                        { name: '2등 추천: B 해수욕장', url: 'b.html' },
+                        { name: '3등 추천: C 해수욕장', url: 'c.html' }
+                    ];
+                    recommendList.innerHTML = places.map(place =>
+                        `<li><a href="${place.url}">${place.name} 숙소/서핑샵 추천</a></li>`
+                    ).join('');
+                    recommendPopup.style.display = 'block';
+                    popupBg.style.display = 'block';
+                }
+            }
+        });
+
+        function closePopup() {
+            document.getElementById('recommendPopup').style.display = 'none';
+            document.getElementById('popupBg').style.display = 'none';
+        }
+        document.getElementById('popupBg').onclick = closePopup;
+    </script>
 </body>
 </html>
