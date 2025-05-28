@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>후기</h1>
+    <p>서핑을 즐기고 나서 후기를 남겨주세요!</p>
+    <form action="submit_review.php" method="POST">
+        <label for="name">이름:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="review">후기:</label>
+        <textarea id="review" name="review" required></textarea>
+
+        <button type="submit">제출</button>
+    </form>
+    <div id="reviews">
+        <h2>후기 목록</h2>
+        <ul>
+            <!-- 후기 목록이 여기에 동적으로 추가됩니다. -->
+        </ul>
+    </div>
+    <script>
+        // 후기 목록을 가져오는 AJAX 요청
+        fetch('get_reviews.php')
+            .then(response => response.json())
+            .then(data => {
+                const reviewsList = document.querySelector('#reviews ul');
+                data.forEach(review => {
+                    const li = document.createElement('li');
+                    li.textContent = `${review.name}: ${review.review}`;
+                    reviewsList.appendChild(li);
+                });
+            })
+            .catch(error => console.error('Error fetching reviews:', error));
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+    <script>
+        // 후기 제출 후 페이지 새로고침
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            fetch('submit_review.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert('후기가 제출되었습니다.');
+                location.reload(); // 페이지 새로고침
+            })
+            .catch(error => console.error('Error submitting review:', error));
+        });
+    </script>
+
+</body>
+</html>

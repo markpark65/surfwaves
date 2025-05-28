@@ -11,11 +11,11 @@
 </head>
 <body>
     <header>
-        <div class="container">
-            <div class="logo">
-                <h1><a href="index.html" style="color:inherit;text-decoration:none;">Surfly</a></h1>
+        <div class="title-banner">
+            <div class="title-banner__logo">
+                <h1><a href="index.html">Surfly</a></h1>
             </div>
-            <nav>
+            <nav class="title-banner__nav">
                 <ul>
                     <li><a href="index.html">홈</a></li>
                     <li><a href="recommend.html">추천</a></li>
@@ -27,49 +27,72 @@
     </header>
     <main>
         <!-- Hero Section -->
-        <section id="hero">
-            <div class="container">
-                <div class="overlay">
-                    <div class="overlay-content">
-                        <h1>파도정보와 날씨</h1>
-                        <p>최적의 서핑 장소 및 날짜를 확인하세요</p>
-                    </div>
-                    <div class="search-container">
-                        <div id="calendar"></div>
+        <section class="hero-section">
+            <div class="hero-section__container">
+                <div class="hero-section__img-wrap">
+                    <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Beautiful Surfing Beach" />
+                    <div class="hero-section__overlay">
+                        <div class="hero-section__text">
+                            <h1>파도정보와 날씨</h1>
+                            <p>최적의 서핑 장소 및 날짜를 확인하세요</p>
+                        </div>
+                        <div class="search-bar">
+                            <div class="calendar-wrap">
+                                <div id="calendar"></div>
+                            </div>
+                            <div class="location-select-wrap">
+                                <select id="regionSelect">
+                                    <option value="all">모든 지역</option>
+                                    <option value="부산">부산</option>
+                                    <option value="포항">포항</option>
+                                    <option value="양양">양양</option>
+                                    <option value="제주도">제주도</option>
+                                </select>
+                            </div>
+                            <button id="searchBtn" class="search-bar__btn">검색</button>
+                        </div>
                     </div>
                 </div>
-                <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Beautiful Surfing Beach" />
             </div>
         </section>
 
-        <!-- 추천 팝업 -->
-        <div class="recommend-popup" id="recommendPopup">
-            <h3>추천 서핑 스팟</h3>
-            <ul id="recommendList">
-                <!-- 추후js -->
-            </ul>
-            <button class="close-btn" onclick="closePopup()">닫기</button>
-        </div>
+        <!-- 추천 팝업 3개 -->
         <div id="popupBg"></div>
+        <div class="popup-close-x" id="popupCloseX" style="display:none;">&times;</div>
+        <div class="recommend-popup" id="recommendPopup1">
+            <h3><a id="spotLink1" class="spot-link" href="#" target="_blank"></a></h3>
+            <img id="spotImg1" src="" alt="">
+            <p id="spotReason1"></p>
+        </div>
+        <div class="recommend-popup" id="recommendPopup2">
+            <h3><a id="spotLink2" class="spot-link" href="#" target="_blank"></a></h3>
+            <img id="spotImg2" src="" alt="">
+            <p id="spotReason2"></p>
+        </div>
+        <div class="recommend-popup" id="recommendPopup3">
+            <h3><a id="spotLink3" class="spot-link" href="#" target="_blank"></a></h3>
+            <img id="spotImg3" src="" alt="">
+            <p id="spotReason3"></p>
+        </div>
 
         <!-- Surfing Locations Section -->
-        <section id="locations">
-            <div class="container">
+        <section class="location-section">
+            <div class="location-section__container">
                 <h2>서핑 장소</h2>
                 <p>최적의 파도에서 서핑을 즐겨보세요</p>
             </div>
         </section>
 
         <!-- Weather Section -->
-        <section id="weather">
-            <div class="container">
+        <section class="weather-section">
+            <div class="weather-section__container">
                 <h2>오늘의 날씨</h2>
                 <p>파도와 날씨에 대한 최신 정보</p>
             </div>
         </section>
     </main>
     <footer>
-        <div class="container">
+        <div class="footer-container">
             <p>© 2025 Surfly. All rights reserved.</p>
         </div>
     </footer>
@@ -77,31 +100,9 @@
         flatpickr("#calendar", {
             locale: "ko",
             dateFormat: "Y-m-d",
-            inline: true,
-            onChange: function(selectedDates, dateStr, instance) {
-                if (dateStr) {
-                    const recommendPopup = document.getElementById('recommendPopup');
-                    const popupBg = document.getElementById('popupBg');
-                    const recommendList = document.getElementById('recommendList');
-                    const places = [
-                        { name: '1등 추천: A 해수욕장', url: 'a.html' },
-                        { name: '2등 추천: B 해수욕장', url: 'b.html' },
-                        { name: '3등 추천: C 해수욕장', url: 'c.html' }
-                    ];
-                    recommendList.innerHTML = places.map(place =>
-                        `<li><a href="${place.url}">${place.name} 숙소/서핑샵 추천</a></li>`
-                    ).join('');
-                    recommendPopup.style.display = 'block';
-                    popupBg.style.display = 'block';
-                }
-            }
+            inline: true
         });
-
-        function closePopup() {
-            document.getElementById('recommendPopup').style.display = 'none';
-            document.getElementById('popupBg').style.display = 'none';
-        }
-        document.getElementById('popupBg').onclick = closePopup;
     </script>
+    <script src="js/script.js"></script>
 </body>
 </html>
