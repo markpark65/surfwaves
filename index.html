@@ -26,38 +26,44 @@
         </div>
     </header>
     <main>
-        <!-- Hero Section -->
         <section class="hero-section">
             <div class="hero-section__container">
                 <div class="hero-section__img-wrap">
-                    <img src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Beautiful Surfing Beach" />
-                    <div class="hero-section__overlay">
-                        <div class="hero-section__text">
-                            <h1>파도정보와 날씨</h1>
-                            <p>최적의 서핑 장소 및 날짜를 확인하세요</p>
-                        </div>
-                        <div class="search-bar">
-                            <div class="calendar-wrap">
-                                <div id="calendar"></div>
+                    <img src="https://images.unsplash.com/photo-1516633630673-67bbad747022?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="서핑 이미지">
+                </div>
+                <div class="hero-section__content">
+                    <h2>최고의 서핑 포인트를 찾아보세요</h2>
+                    <div class="hero-section__search-box">
+                        <div class="date-picker-wrap">
+                            <div id="calendar">
+                                <input type="text" placeholder="날짜 선택 (캘린더)">
                             </div>
-                            <div class="location-select-wrap">
-                                <select id="regionSelect">
-                                    <option value="all">모든 지역</option>
-                                    <option value="부산">부산</option>
-                                    <option value="포항">포항</option>
-                                    <option value="양양">양양</option>
-                                    <option value="제주도">제주도</option>
-                                </select>
-                            </div>
-                            <button id="searchBtn" class="search-bar__btn">검색</button>
                         </div>
+                        <div class ="location-select">
+                             <select id="regionSelect">
+                                <option value="all">모든 지역</option>
+                                <option value="제주도">제주도</option>
+                                <option value="부산">부산</option>
+                                <option value="양양">양양</option>
+                                <option value="포항">포항</option>
+                            </select>
+                        </div>
+                        <button id="searchBtn">검색</button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 추천 팝업 3개 -->
-        <div id="popupBg"></div>
+        <!--<section class="weather-info-section">
+            <div class="weather-info-section__container">
+                <h2>선택 지역 날씨 정보</h2>
+                <div id="weatherInfo">
+                    <p>검색 버튼을 눌러 선택한 지역의 날씨 정보를 확인하세요.</p>
+                </div>
+            </div>
+        </section>-->
+
+        <div class="popup-bg" id="popupBg" style="display:none;"></div>
         <div class="popup-close-x" id="popupCloseX" style="display:none;">&times;</div>
         <div class="recommend-popup" id="recommendPopup1">
             <h3><a id="spotLink1" class="spot-link" href="#" target="_blank"></a></h3>
@@ -75,34 +81,25 @@
             <p id="spotReason3"></p>
         </div>
 
-        <!-- Surfing Locations Section -->
-        <section class="location-section">
+        <div class="location-section">
             <div class="location-section__container">
                 <h2>서핑 장소</h2>
                 <p>최적의 파도에서 서핑을 즐겨보세요</p>
             </div>
-        </section>
+        </div>
 
-        <!-- Weather Section -->
-        <section class="weather-section">
+        <div class="weather-section">
             <div class="weather-section__container">
                 <h2>오늘의 날씨</h2>
                 <p>파도와 날씨에 대한 최신 정보</p>
             </div>
-        </section>
-    </main>
-    <footer>
-        <div class="footer-container">
-            <p>© 2025 Surfly. All rights reserved.</p>
         </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Surfly. All rights reserved.</p>
     </footer>
-    <script>
-        flatpickr("#calendar", {
-            locale: "ko",
-            dateFormat: "Y-m-d",
-            inline: true
-        });
-    </script>
+
     <script src="js/script.js"></script>
 </body>
 </html>
