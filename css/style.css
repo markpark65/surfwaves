@@ -113,9 +113,9 @@ main, section, .hero-section__container {
     gap: 16px;
     align-items: center;
     margin-bottom: 20px;
-    padding: 40px 0px;
+    /* padding: 40px 0px; */ /* 기존 패딩 제거 */
     justify-content: center;
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* 요소들이 다음 줄로 넘어갈 수 있도록 */
     opacity: 0.95; /* 불투명도 약간 높임 */
     background-color: rgba(255, 255, 255, 0.2); /* 배경 색상 추가하여 시각적으로 분리 */
     border-radius: 8px; /* 모서리 둥글게 */
@@ -125,6 +125,7 @@ main, section, .hero-section__container {
     padding: 20px; /* 내부 여백 조정 */
     max-width: 800px; /* 데스크톱에서 최대 너비 */
     width: 90%; /* 유동적인 너비 */
+    color: #333; /* 검색 박스 내 글자 색상 */
 }
 
 /* 각 검색 입력 요소 스타일 */
@@ -153,7 +154,7 @@ main, section, .hero-section__container {
     top: calc(100% + 10px); /* 입력창 바로 아래에 위치 */
     left: 50%;
     transform: translateX(-50%);
-    display: block !important; /* 항상 보이도록 */
+    display: block !important; /* 항상 보이도록*/
 }
 
 #searchBtn {
@@ -170,6 +171,7 @@ main, section, .hero-section__container {
     cursor: pointer;
     transition: background 0.2s;
     flex-shrink: 0; /* 버튼이 줄어들지 않도록 */
+    white-space: nowrap; /* 텍스트가 줄바꿈되지 않도록 */
 }
 #searchBtn:hover {
     background: #1565c0;
