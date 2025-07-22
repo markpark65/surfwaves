@@ -4,6 +4,7 @@ html, body {
     padding: 0;
     background: #f8fcff;
     box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 폰트 추가 */
 }
 main, section, .hero-section__container {
     box-shadow: none !important;
@@ -56,7 +57,7 @@ main, section, .hero-section__container {
 .hero-section {
     position: relative;
     width: 100%;
-    height: 60vh;
+    height: 60vh; /* 데스크톱 기준 높이 유지 */
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -67,29 +68,30 @@ main, section, .hero-section__container {
 }
 .hero-section__img-wrap {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 90%;
-    height: 90%;
-    transform: translate(-50%, -50%);
+    top: 0; /* 이미지 전체를 채우도록 수정 */
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: 1;
 }
 .hero-section__img-wrap img {
     width: 100%;
     height: 100%;
     filter: brightness(0.9);
-    object-position: 60% 60%;
-    border-radius: 6px;
-    object-fit: cover; /* fill 대신 cover 사용 */
+    object-position: center; /* 이미지를 중앙에 맞춤 */
+    border-radius: 0; /* 전체 배경이므로 모서리 둥글게 하지 않음 */
+    object-fit: cover; /* 이미지가 잘리지 않도록 컨테이너를 채움 */
 }
 .hero-section__content {
     position: relative;
-    z-index: 2;
+    z-index: 2; /* 텍스트가 이미지 위에 오도록 */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 20px;
+    width: 100%; /* 너비 100%로 설정 */
+    box-sizing: border-box; /* 패딩 포함 너비 계산 */
 }
 .hero-section__content p {
     font-size: 1.2rem;
@@ -102,6 +104,7 @@ main, section, .hero-section__container {
     margin-bottom: 30px;
     font-weight: 700;
     line-height: 1.2;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* 텍스트 가독성 향상 */
 }
 
 /* ===== 검색 박스 디자인 개선 ===== */
@@ -113,25 +116,46 @@ main, section, .hero-section__container {
     padding: 40px 0px;
     justify-content: center;
     flex-wrap: wrap;
-    opacity: 0.89;
+    opacity: 0.95; /* 불투명도 약간 높임 */
+    background-color: rgba(255, 255, 255, 0.2); /* 배경 색상 추가하여 시각적으로 분리 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2); /* 그림자 추가 */
+    backdrop-filter: blur(5px); /* 배경 블러 효과 */
+    -webkit-backdrop-filter: blur(5px); /* 웹킷 브라우저 지원 */
+    padding: 20px; /* 내부 여백 조정 */
+    max-width: 800px; /* 데스크톱에서 최대 너비 */
+    width: 90%; /* 유동적인 너비 */
 }
-#regionSelect {
+
+/* 각 검색 입력 요소 스타일 */
+#regionSelect,
+.date-picker-wrap #calendar input[type="text"] { /* Flatpickr input 선택자 변경 */
     border-radius: 6px;
     border: 1px solid #ddd;
     font-size: 16px;
-    padding: 0 12px;
-    height: 30px;
+    padding: 8px 12px;
+    height: 40px; /* 높이 통일 */
     min-width: 120px;
-    max-width: 180px;
+    max-width: 200px;
+    box-sizing: border-box; /* 패딩 포함 너비 계산 */
+    background-color: #fff; /* 배경색 흰색으로 */
+    color: #333;
 }
-#calendarInput {
-    background: none;
-    border-radius: 0;
-    font-size: 16px;
-    padding: 0;
-    height: 36px;
-    width: 140px;
+/* Flatpickr 캘린더 자체 스타일 */
+.flatpickr-calendar {
+    font-size: 14px; /* 캘린더 내부 폰트 크기 조정 */
+    width: 280px; /* 고정 너비 설정 */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    border: none;
+    position: absolute; /* 캘린더 위치 조정을 위해 absolute */
+    z-index: 100; /* 검색 박스보다 위에 오도록 */
+    top: calc(100% + 10px); /* 입력창 바로 아래에 위치 */
+    left: 50%;
+    transform: translateX(-50%);
+    display: block !important; /* 항상 보이도록 */
 }
+
 #searchBtn {
     border-radius: 6px;
     border: none;
@@ -141,10 +165,11 @@ main, section, .hero-section__container {
     background: #1976d2;
     font-size: 16px;
     padding: 0px 18px;
-    height: 36px;
+    height: 40px; /* 높이 통일 */
     color: #fff;
     cursor: pointer;
     transition: background 0.2s;
+    flex-shrink: 0; /* 버튼이 줄어들지 않도록 */
 }
 #searchBtn:hover {
     background: #1565c0;
@@ -179,16 +204,15 @@ main, section, .hero-section__container {
 .recommend-popup {
     display: none;
     position: fixed;
-    top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
     background: #fff;
     padding: 25px 30px;
     border-radius: 12px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
     z-index: 1050; /* 다른 요소 위에 표시 */
     width: 90%;
-    max-width: 320px; /* 기존 400px에서 조정 */
+    max-width: 380px; /* 최대 너비 조정 */
     box-sizing: border-box;
     text-align: center;
     animation: fadeIn 0.3s ease-out;
@@ -221,7 +245,7 @@ main, section, .hero-section__container {
     line-height: 1.5;
     margin-bottom: 0;
 }
-/* 기존 팝업 위치 */
+/* 팝업별 고정 위치 (데스크톱) */
 #recommendPopup1 { top: 20%; }
 #recommendPopup2 { top: 42%; }
 #recommendPopup3 { top: 64%; }
@@ -230,118 +254,106 @@ main, section, .hero-section__container {
 /* ===== 반응형 디자인 ===== */
 @media (max-width: 768px) {
     .hero-section {
-        height: 50vh; /* 섹션 높이를 줄여서 텍스트가 들어올 공간 확보 */
+        height: 55vh; /* 태블릿 환경에서 높이 조정 */
     }
 
     .hero-section__content h2 {
-        font-size: 2rem; /* h2 폰트 크기 줄이기 */
-        margin-bottom: 15px; /* 하단 마진 조정 */
+        font-size: 2.5rem; /* h2 폰트 크기 줄이기 */
+        margin-bottom: 20px;
     }
     .hero-section__search-box {
         flex-direction: column; /* 검색 박스를 세로로 배치 */
         gap: 12px; /* 요소 간 간격 줄이기 */
-        padding: 20px 0; /* 상하 여백 줄이기 */
+        padding: 20px; /* 내부 여백 조정 */
+        width: 95%; /* 너비 조정 */
+        max-width: 320px; /* 태블릿 환경 최대 너비 */
     }
 
-    /* 캘린더 크기 조정 */
+    /* 캘린더 인풋 필드 */
+    .date-picker-wrap #calendar input[type="text"] {
+        width: 100%; /* 너비 100% */
+        max-width: none; /* 최대 너비 제한 해제 */
+    }
+
+    /* Flatpickr 캘린더 자체 스타일 */
     .flatpickr-calendar {
-        max-width: 90%; /* 캘린더 최대 너비 제한 */
-        font-size: 14px; /* 캘린더 내부 폰트 크기 조정 */
+        max-width: 95%; /* 캘린더 최대 너비 제한 */
+        font-size: 13px; /* 캘린더 내부 폰트 크기 조정 */
         left: 50% !important; /* 가운데 정렬을 위해 */
         transform: translateX(-50%) !important; /* 가운데 정렬을 위해 */
+        top: calc(100% + 10px); /* 입력창 바로 아래 유지 */
     }
 
-    .flatpickr-calendar .flatpickr-days {
-        max-height: 200px; /* 날짜 영역의 최대 높이 설정 */
-    }
-
-    /* 날짜 선택 인풋 필드 너비 조정 */
-    #calendar input[type="text"] {
-        width: 90%; /* 캘린더 인풋 필드 너비 조정 */
-        max-width: 200px; /* 최대 너비 제한 */
-        box-sizing: border-box;
-        padding: 8px 12px;
-        text-align: center;
-    }
-
-    /* 검색 박스 내 요소들 너비 재조정 */
-    #regionSelect, #calendar .flatpickr-input, #searchBtn {
-        width: 90%; /* 모바일에서 각 요소의 너비를 동일하게 설정 */
-        max-width: 280px; /* 최대 너비 제한 */
-        margin: 5px auto; /* 중앙 정렬을 위해 마진 추가 */
-    }
-
-    #calendar .flatpickr-input {
-        margin-bottom: 0; /* flatpickr-input과 캘린더 사이의 불필요한 마진 제거 */
+    /* 검색 박스 내 다른 요소들 */
+    #regionSelect, #searchBtn {
+        width: 100%; /* 너비 100% */
+        max-width: none; /* 최대 너비 제한 해제 */
     }
 
     .hero-section__img-wrap img {
-        object-fit: cover; /* 이미지 크기 조정 */
-        width: 100%; /* 이미지 너비를 화면에 맞게 조정 */
-        height: auto; /* 이미지 높이 자동 조정 */
+        object-fit: cover;
     }
 
+    /* 팝업 위치 조정 (모바일에서 세로로 배열) */
+    #recommendPopup1 { top: 15%; }
+    #recommendPopup2 { top: 45%; }
+    #recommendPopup3 { top: 75%; }
     .recommend-popup {
-        width: 90%; /* 팝업 너비를 화면에 맞게 조정 */
-        max-width: 300px; /* 최대 너비 제한 */
+        max-width: 300px; /* 팝업 최대 너비 */
+        padding: 20px 25px;
     }
-
     .recommend-popup h3 {
-        font-size: 1.4rem; /* 팝업 제목 크기 줄이기 */
+        font-size: 1.3rem;
     }
-
     .recommend-popup p {
-        font-size: 1rem; /* 팝업 내용 크기 줄이기 */
+        font-size: 0.95rem;
     }
-
-    /* 팝업 위치 조정 */
-    #recommendPopup1 { top: 15%; transform: translate(-50%, 0); }
-    #recommendPopup2 { top: 45%; transform: translate(-50%, 0); }
-    #recommendPopup3 { top: 75%; transform: translate(-50%, 0); }
 }
 
 @media (max-width: 480px) {
-    body {
-        font-size: 14px; /* 기본 폰트 크기 조정 */
-    }
     .title-banner__logo h1 {
         font-size: 1.5rem;
-        margin: 0 0 0 16px; /* 좌측 마진 줄이기 */
+        margin: 0 0 0 16px;
     }
     .title-banner__nav ul {
-        margin: 0 16px 0 0; /* 우측 마진 줄이기 */
-        gap: 12px; /* 메뉴 항목 간 간격 줄이기 */
+        margin: 0 16px 0 0;
+        gap: 12px;
     }
     .title-banner__nav a {
         font-size: 0.9rem;
         padding: 2px 8px;
     }
+
     .hero-section {
-        height: 45vh; /* 더 작은 화면에서 섹션 높이 추가 조정 */
+        height: 50vh; /* 휴대폰 환경에서 높이 조정 */
     }
     .hero-section__content h2 {
-        font-size: 1.5rem; /* 더 작은 화면에서 h2 폰트 크기 추가 조정 */
-        word-break: keep-all; /* 단어가 잘리지 않도록 (선택 사항) */
-        line-height: 1.3; /* 줄 간격 조정 */
+        font-size: 1.8rem; /* h2 폰트 크기 추가 조정 */
+        line-height: 1.3;
+        word-break: keep-all; /* 단어가 잘리지 않도록 */
+        margin-bottom: 15px;
     }
+    .hero-section__search-box {
+        padding: 15px; /* 내부 여백 더 줄임 */
+        width: 95%;
+        max-width: 280px; /* 휴대폰 환경 최대 너비 */
+    }
+
+    /* Flatpickr 캘린더 자체 스타일 */
     .flatpickr-calendar {
-        max-width: 95%; /* 더 작은 화면에서 캘린더 너비 조정 */
+        max-width: 98%; /* 캘린더 최대 너비 */
+        font-size: 12px; /* 캘린더 내부 폰트 크기 더 줄임 */
     }
-    /* 검색 박스 내 요소들 너비 재조정 */
-    #regionSelect, #calendar .flatpickr-input, #searchBtn {
-        width: 95%; /* 더 작은 화면에서 너비 증가 */
-        max-width: 250px; /* 더 작은 화면에서 최대 너비 조정 */
-    }
+
     .recommend-popup {
-        width: 95%; /* 더 작은 화면에서 너비 증가 */
-        max-width: 280px; /* 더 작은 화면에서 최대 너비 조정 */
-        padding: 15px 20px; /* 팝업 내부 여백 조정 */
+        max-width: 280px; /* 팝업 최대 너비 */
+        padding: 18px 22px;
     }
     .recommend-popup h3 {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
     .recommend-popup p {
-        font-size: 0.9rem; /* 팝업 내 상세 정보 폰트 크기 조정 */
+        font-size: 0.85rem;
     }
 }
 
