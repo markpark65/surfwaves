@@ -51,7 +51,7 @@ function hideLoading() {
 
 // 기상청 서핑지수 API에서 전체 데이터 받아오기 (프록시 사용)
 async function fetchKmaSurfDataAll(reqDate) {
-    const url = `http://localhost:4000/api/kma-surf-forecast?reqDate=${reqDate}&numOfRows=300`;
+    const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=300`;
     try {
         const res = await fetch(url);
         if (!res.ok) {
@@ -64,7 +64,7 @@ async function fetchKmaSurfDataAll(reqDate) {
         return json.response?.body?.items?.item || [];
     } catch (e) {
         console.error("Failed to fetch KMA Surf Data:", e);
-        alert("날씨 정보를 가져오는 데 실패했습니다. 프록시 서버가 실행 중인지, API 키가 올바른지 확인해주세요.");
+        alert("날씨 정보를 가져오는 데 실패했습니다. API 키와 서버 상태를 확인해주세요.");
         return [];
     }
 }
