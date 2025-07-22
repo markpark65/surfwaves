@@ -132,31 +132,37 @@ function showPopupsWithApi(topBeaches) {
     for (let i = 1; i <= 3; i++) {
         document.getElementById(`recommendPopup${i}`).style.display = 'none';
     }
-    if (topBeaches.length === 0) {
+
+    if (!topBeaches || topBeaches.length === 0) {
         alert("추천할 해수욕장 정보가 없습니다.");
         return;
     }
+
     for (let i = 0; i < Math.min(topBeaches.length, 3); i++) {
         const spot = topBeaches[i];
         const popupElement = document.getElementById(`recommendPopup${i + 1}`);
         const link = document.getElementById(`spotLink${i + 1}`);
         const img = document.getElementById(`spotImg${i + 1}`);
         const reason = document.getElementById(`spotReason${i + 1}`);
+
         if (popupElement && link && img && reason) {
             link.textContent = `${i + 1}순위: ${spot.name}`;
-            // 페이지 URL 연결: beaches 데이터에 정의된 pageUrl 사용, 없으면 '#' 처리
-            link.href = spot.pageUrl ? spot.pageUrl : "#";
-            // target은 새 창이 아니라 동일 탭(원하는 경우 _blank로 변경)
-            link.target = "_self";
+            link.href = spot.pageUrl || "#";
+            link.target = "_blank";
+
             img.src = spot.imageUrl || `images/beach_placeholder.jpg`;
             img.alt = spot.name;
-            reason.textContent =
+
+            const detail =
                 `파고: ${spot.data?.avgWvhgt ?? '-'}m, 파주기: ${spot.data?.avgWvpd ?? '-'}s, ` +
                 `풍속: ${spot.data?.avgWspd ?? '-'}m/s, 수온: ${spot.data?.avgWtem ?? '-'}°C, ` +
                 `서핑지수: ${spot.data?.totalIndex ?? '-'}`;
+            reason.textContent = detail;
+
             popupElement.style.display = 'block';
         }
     }
+
     document.getElementById('popupBg').style.display = 'block';
     document.getElementById('popupCloseX').style.display = 'flex';
 }

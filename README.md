@@ -1,1 +1,1 @@
-# surfwaves
+[![Netlify Status](https://api.netlify.com/api/v1/badges/11299e53-6009-4f56-8fc0-1ecf19dc8132/deploy-status)](https://app.netlify.com/projects/surfly/deploys)
