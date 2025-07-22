@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입 - Surfly</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* 중앙 회원가입 폼 스타일 */
+    .signup-container {
+      max-width: 400px;
+      margin: 80px auto; /* 상단, 하단 여백 */
+      padding: 40px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .signup-container h2 {
+      margin-bottom: 24px;
+      font-size: 1.8rem;
+      color: #333;
+    }
+    .signup-container input[type="text"],
+    .signup-container input[type="password"],
+    .signup-container input[type="email"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    .signup-container .error-message {
+      color: red;
+      font-size: 0.9rem;
+      display: none;
+      margin-bottom: 16px;
+    }
+    .signup-container button {
+      width: 100%;
+      padding: 12px;
+      background-color: #2196f3;
+      color: #fff;
+      border: none;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- 상단 베너 (index.html과 동일) -->
+  <header>
+    <div class="title-banner">
+      <div class="title-banner__logo">
+        <h1><a href="index.html">Surfly</a></h1>
+      </div>
+      <nav class="title-banner__nav">
+        <ul>
+          <li><a href="index.html">홈</a></li>
+          <li><a href="login.html">로그인</a></li>
+          <li><a href="commu.html">후기</a></li>
+          <li><a href="about.html">문의</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  
+  <!-- 중앙 회원가입 폼 -->
+  <main>
+    <div class="signup-container">
+      <h2>회원가입</h2>
+      <form id="signupForm" action="signup_process.html" method="post">
+        <input type="text" name="nickname" placeholder="닉네임" required>
+        <input type="text" name="username" placeholder="아이디" required>
+        <input type="password" id="password" name="password" placeholder="비밀번호" required>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="비밀번호 확인" required>
+        <div id="passwordCheck" class="error-message">비밀번호가 일치하지 않습니다.</div>
+        <input type="email" name="email" placeholder="이메일" required>
+        <button type="submit">가입</button>
+      </form>
+    </div>
+  </main>
+  
+  <!-- 하단 베너 (index.html과 동일) -->
+  <footer>
+    <p>&copy; 2025 Surfly. All rights reserved.</p>
+  </footer>
+  
+  <script>
+    // 비밀번호와 확인 비밀번호 일치 체크
+    const signupForm = document.getElementById('signupForm');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const passwordCheck = document.getElementById('passwordCheck');
+    
+    function checkPasswordMatch() {
+      if (password.value !== confirmPassword.value) {
+        passwordCheck.style.display = 'block';
+        return false;
+      } else {
+        passwordCheck.style.display = 'none';
+        return true;
+      }
+    }
+    
+    // 입력시마다 일치 여부 체크
+    password.addEventListener('input', checkPasswordMatch);
+    confirmPassword.addEventListener('input', checkPasswordMatch);
+    
+    signupForm.addEventListener('submit', function(event) {
+      if (!checkPasswordMatch()) {
+        event.preventDefault();
+        alert('비밀번호가 일치하지 않습니다.');
+      }
+      // 여기서 추가적으로 가입 데이터를 저장하는 backend 로직과 연동하면 됩니다.
+    });
+  </script>
+</body>
+</html>
+```<!-- filepath: c:\Users\markp\OneDrive\Documents\GitHub\surfly\signup.html -->

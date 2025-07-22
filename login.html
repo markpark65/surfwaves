@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로그인 - Surfly</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* 중앙 로그인 박스 스타일 */
+    .login-container {
+      max-width: 400px;
+      margin: 80px auto; /* 상단, 하단 여백 */
+      padding: 40px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .login-container h2 {
+      margin-bottom: 24px;
+      font-size: 1.8rem;
+      color: #333;
+    }
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    .login-container button {
+      width: 100%;
+      padding: 12px;
+      background-color: #2196f3;
+      color: #fff;
+      border: none;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+    .login-container .links {
+      display: flex;
+      justify-content: space-around;
+      font-size: 0.9rem;
+    }
+    .login-container .links a {
+      color: #2196f3;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- 상단 베너 (index.html과 동일) -->
+  <header>
+    <div class="title-banner">
+      <div class="title-banner__logo">
+        <h1><a href="index.html">Surfly</a></h1>
+      </div>
+      <nav class="title-banner__nav">
+        <ul>
+          <li><a href="index.html">홈</a></li>
+          <li><a href="login.html">로그인</a></li>
+          <li><a href="commu.html">후기</a></li>
+          <li><a href="about.html">문의</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 중앙 로그인 폼 -->
+  <main>
+    <div class="login-container">
+      <h2>로그인</h2>
+      <form action="login_process.html" method="post">
+        <input type="text" name="username" placeholder="아이디" required>
+        <input type="password" name="password" placeholder="비밀번호" required>
+        <button type="submit">로그인</button>
+      </form>
+      <div class="links">
+        <a href="signup.html">회원가입</a>
+        <a href="findpw.html">비밀번호 찾기</a>
+        <a href="findid.html">아이디 찾기</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- 하단 베너 (index.html과 동일) -->
+  <footer>
+    <p>&copy; 2025 Surfly. All rights reserved.</p>
+  </footer>
+</body>
+</html>
