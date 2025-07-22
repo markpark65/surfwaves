@@ -281,9 +281,15 @@ main, section, .hero-section__container {
     .flatpickr-calendar {
         max-width: 95%; /* 캘린더 최대 너비 제한 */
         font-size: 13px; /* 캘린더 내부 폰트 크기 조정 */
-        left: 50% !important; /* 가운데 정렬을 위해 */
-        transform: translateX(-50%) !important; /* 가운데 정렬을 위해 */
-        top: calc(100% + 10px); /* 입력창 바로 아래 유지 */
+        position: relative; /* 상대 위치로 변경하여 검색 박스 내에 유지 */
+        top: 0;
+        left: 0;
+        transform: none; /* 변형 제거 */
+        margin-top: 10px; /* 입력창 아래로 약간의 마진 */
+    }
+    .flatpickr-calendar .flatpickr-innerContainer { /* 캘린더 내부 컨테이너 스크롤 가능하게 */
+        max-height: 250px; /* 최대 높이 설정 */
+        overflow-y: auto; /* 세로 스크롤 가능하게 */
     }
 
     /* 검색 박스 내 다른 요소들 */
@@ -334,6 +340,8 @@ main, section, .hero-section__container {
         line-height: 1.3;
         word-break: keep-all; /* 단어가 잘리지 않도록 */
         margin-bottom: 15px;
+        color: #fff; /* 텍스트 색상을 흰색으로 명시하여 가독성 높임 */
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.7); /* 그림자 진하게 */
     }
     .hero-section__search-box {
         padding: 15px; /* 내부 여백 더 줄임 */
