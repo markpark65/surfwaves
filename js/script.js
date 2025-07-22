@@ -59,8 +59,7 @@ async function fetchKmaSurfDataAll(reqDate) {
             throw new Error(`HTTP error! status: ${res.status}, Message: ${errorText}`);
         }
         const json = await res.json();
-        console.log("KMA API 응답:", json); // 응답 전체 구조 확인
-        // API 응답 구조에 따라 데이터 접근 (여기서는 json.response.body.items.item로 가정)
+        console.log("KMA API 응답:", json);
         return json.response?.body?.items?.item || [];
     } catch (e) {
         console.error("Failed to fetch KMA Surf Data:", e);
