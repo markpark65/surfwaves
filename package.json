@@ -1,0 +1,14 @@
+{
+  "name": "surfly",
+  "version": "1.0.0",
+  "main": "index.js",
+  "engines": {
+    "node": "16.x"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  },
+  "scripts": {
+    "start": "netlify dev"
+  }
+}

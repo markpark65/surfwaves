@@ -1,0 +1,7 @@
+[build]
+  functions = "netlify/functions"
+  publish = "public"  # 정적 파일이 위치한 폴더. 실제 폴더 이름에 맞게 변경하세요.
+
+[functions]
+  # 필요에 따라 Node 버전 설정
+  node_bundler = "esbuild"
