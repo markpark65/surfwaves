@@ -1,30 +1,30 @@
 // Surfly: 기상청 서핑지수 API 연동 + 해수욕장 정보 + 팝업 연동 + 로딩 UI + 날짜 선택
 
-// 해수욕장 정보 (spotName은 기상청 표기와 일치해야 하며, imageUrl 추가)
+// 해수욕장 정보 (spotName은 기상청 표기와 일치해야 하며, imageUrl, pageUrl 추가)
 const beaches = [
     // 제주도
-    { name: "이호테우 해변", region: "제주도", spotName: "이호테우해수욕장", imageUrl: "images/jeju_ihotaewoo.jpg" },
-    { name: "월정리 해수욕장", region: "제주도", spotName: "월정리해수욕장", imageUrl: "images/jeju_woljeongri.jpg" },
-    { name: "함덕 해수욕장", region: "제주도", spotName: "함덕해수욕장", imageUrl: "images/jeju_hamdeok.jpg" },
-    { name: "곽지 해수욕장", region: "제주도", spotName: "곽지해수욕장", imageUrl: "images/jeju_gwakji.jpg" },
-    { name: "중문 색달 해수욕장", region: "제주도", spotName: "중문색달해수욕장", imageUrl: "images/jeju_jungmunsaekdal.jpg" },
+    { name: "이호테우 해변", region: "제주도", spotName: "이호테우해수욕장", imageUrl: "images/jeju_ihotaewoo.jpg", pageUrl: "recommend(jeju)/ihotaewoo.html" },
+    { name: "월정리 해수욕장", region: "제주도", spotName: "월정리해수욕장", imageUrl: "images/jeju_woljeongri.jpg", pageUrl: "recommend(jeju)/woljeongri.html" },
+    { name: "함덕 해수욕장", region: "제주도", spotName: "함덕해수욕장", imageUrl: "images/jeju_hamdeok.jpg", pageUrl: "recommend(jeju)/hamdeok.html" },
+    { name: "곽지 해수욕장", region: "제주도", spotName: "곽지해수욕장", imageUrl: "images/jeju_gwakji.jpg", pageUrl: "recommend(jeju)/gwakji.html" },
+    { name: "중문 색달 해수욕장", region: "제주도", spotName: "중문색달해수욕장", imageUrl: "images/jeju_jungmunsaekdal.jpg", pageUrl: "recommend(jeju)/jungmunsaekdal.html" },
     // 부산
-    { name: "송정해변", region: "부산", spotName: "송정해수욕장", imageUrl: "images/busan_songjeong.jpg" },
-    { name: "기장 임랑해변", region: "부산", spotName: "임랑해수욕장", imageUrl: "images/busan_imrang.jpg" },
-    { name: "다대포해수욕장", region: "부산", spotName: "다대포해수욕장", imageUrl: "images/busan_dadaepo.jpg" },
-    { name: "해운대", region: "부산", spotName: "해운대해수욕장", imageUrl: "images/busan_haeundae.jpg" },
-    { name: "광안리 해수욕장", region: "부산", spotName: "광안리해수욕장", imageUrl: "images/busan_gwangalli.jpg" },
+    { name: "송정해변", region: "부산", spotName: "송정해수욕장", imageUrl: "images/busan_songjeong.jpg", pageUrl: "recommend(busan)/songjeong.html" },
+    { name: "기장 임랑해변", region: "부산", spotName: "임랑해수욕장", imageUrl: "images/busan_imrang.jpg", pageUrl: "recommend(busan)/imrang.html" },
+    { name: "다대포해수욕장", region: "부산", spotName: "다대포해수욕장", imageUrl: "images/busan_dadaepo.jpg", pageUrl: "recommend(busan)/dadaepo_busan.html" },
+    { name: "해운대", region: "부산", spotName: "해운대해수욕장", imageUrl: "images/busan_haeundae.jpg", pageUrl: "recommend(busan)/haeundae.html" },
+    { name: "광안리 해수욕장", region: "부산", spotName: "광안리해수욕장", imageUrl: "images/busan_gwangalli.jpg", pageUrl: "recommend(busan)/gwangalli.html" },
     // 양양
-    { name: "죽도해수욕장", region: "양양", spotName: "죽도해수욕장", imageUrl: "images/yangyang_jukdo.jpg" },
-    { name: "인구해변", region: "양양", spotName: "인구해수욕장", imageUrl: "images/yangyang_ingu.jpg" },
-    { name: "서피비치", region: "양양", spotName: "서피비치해수욕장", imageUrl: "images/yangyang_surfyy.jpg" },
-    { name: "38선해변", region: "양양", spotName: "38선해수욕장", imageUrl: "images/yangyang_38line.jpg" },
-    { name: "낙산해수욕장", region: "양양", spotName: "낙산해수욕장", imageUrl: "images/yangyang_naksan.jpg" },
-    { name: "갯마을해변", region: "양양", spotName: "갯마을해수욕장", imageUrl: "images/yangyang_gaetmaeul.jpg" },
+    { name: "죽도해수욕장", region: "양양", spotName: "죽도해수욕장", imageUrl: "images/yangyang_jukdo.jpg", pageUrl: "recommend(yangyang)/jukdo.html" },
+    { name: "인구해변", region: "양양", spotName: "인구해수욕장", imageUrl: "images/yangyang_ingu.jpg", pageUrl: "recommend(yangyang)/ingu.html" },
+    { name: "서피비치", region: "양양", spotName: "서피비치해수욕장", imageUrl: "images/yangyang_surfyy.jpg", pageUrl: "recommend(yangyang)/surfyy.html" },
+    { name: "38선해변", region: "양양", spotName: "38선해수욕장", imageUrl: "images/yangyang_38line.jpg", pageUrl: "recommend(yangyang)/38line.html" },
+    { name: "낙산해수욕장", region: "양양", spotName: "낙산해수욕장", imageUrl: "images/yangyang_naksan.jpg", pageUrl: "recommend(yangyang)/naksan.html" },
+    { name: "갯마을해변", region: "양양", spotName: "갯마을해수욕장", imageUrl: "images/yangyang_gaetmaeul.jpg", pageUrl: "recommend(yangyang)/gaetmaeul.html" },
     // 포항
-    { name: "월포해수욕장", region: "포항", spotName: "월포해수욕장", imageUrl: "images/pohang_wolpo.jpg" },
-    { name: "용한리해수욕장", region: "포항", spotName: "용한리해수욕장", imageUrl: "images/pohang_yonghanri.jpg" },
-    { name: "영일대해수욕장", region: "포항", spotName: "영일대해수욕장", imageUrl: "images/pohang_yeongildae.jpg" }
+    { name: "월포해수욕장", region: "포항", spotName: "월포해수욕장", imageUrl: "images/pohang_wolpo.jpg", pageUrl: "recommend(pohang)/wolpo.html" },
+    { name: "용한리해수욕장", region: "포항", spotName: "용한리해수욕장", imageUrl: "images/pohang_yonghanri.jpg", pageUrl: "recommend(pohang)/yonghanri.html" },
+    { name: "영일대해수욕장", region: "포항", spotName: "영일대해수욕장", imageUrl: "images/pohang_yeongildae.jpg", pageUrl: "recommend(pohang)/yeongildae.html" }
 ];
 
 // 로딩 오버레이 생성
@@ -60,8 +60,7 @@ async function fetchKmaSurfDataAll(reqDate) {
         }
         const json = await res.json();
         console.log("KMA API 응답:", json); // 응답 전체 구조 확인
-
-        // API 응답 구조에 따라 데이터 접근 경로 변경 (여기서는 json.response.body.items.item로 가정)
+        // API 응답 구조에 따라 데이터 접근 (여기서는 json.response.body.items.item로 가정)
         return json.response?.body?.items?.item || [];
     } catch (e) {
         console.error("Failed to fetch KMA Surf Data:", e);
@@ -82,7 +81,6 @@ function findTodayMorningItem(items, spotName) {
 // 추천 알고리즘
 function calculateScore(data) {
     let score = 0;
-
     // 1. 파주기 (Wave Period) - 최대 4점
     if (data.avgWvpd < 6) {
         score += 0;
@@ -93,14 +91,12 @@ function calculateScore(data) {
     } else {
         score += 3;
     }
-
     // 2. 풍속 (Wind Speed) - 최대 3점
     if (data.avgWspd >= 0 && data.avgWspd <= 5) {
         score += 3;
     } else if (data.avgWspd > 10) {
         score -= 3;
     }
-
     // 3. 파고 (Wave Height) - 최대 2점
     if (data.avgWvhgt < 0.3) {
         score += 0;
@@ -113,7 +109,6 @@ function calculateScore(data) {
     } else {
         score += 0;
     }
-
     // 4. 수온 (Water Temperature) - 최대 2점
     if (data.avgWtem >= 22) {
         score += 2;
@@ -126,11 +121,11 @@ function calculateScore(data) {
     } else {
         score -= 2;
     }
-
     return score;
 }
 
 // 팝업에 API 결과 반영 (필드명 최신화)
+// 수정: 각 추천 해수욕장 객체의 pageUrl 속성을 사용해 링크 연결
 function showPopupsWithApi(topBeaches) {
     // 모든 팝업 숨기기
     document.getElementById('popupBg').style.display = 'none';
@@ -138,31 +133,28 @@ function showPopupsWithApi(topBeaches) {
     for (let i = 1; i <= 3; i++) {
         document.getElementById(`recommendPopup${i}`).style.display = 'none';
     }
-
     if (topBeaches.length === 0) {
         alert("추천할 해수욕장 정보가 없습니다.");
         return;
     }
-
     for (let i = 0; i < Math.min(topBeaches.length, 3); i++) {
         const spot = topBeaches[i];
         const popupElement = document.getElementById(`recommendPopup${i + 1}`);
         const link = document.getElementById(`spotLink${i + 1}`);
         const img = document.getElementById(`spotImg${i + 1}`);
         const reason = document.getElementById(`spotReason${i + 1}`);
-
         if (popupElement && link && img && reason) {
             link.textContent = `${i + 1}순위: ${spot.name}`;
-            link.href = "#"; // 상세 페이지 링크 (추가 가능)
-            link.target = "_blank";
-
-            // local imageUrl 사용
+            // 페이지 URL 연결: beaches 데이터에 정의된 pageUrl 사용, 없으면 '#' 처리
+            link.href = spot.pageUrl ? spot.pageUrl : "#";
+            // target은 새 창이 아니라 동일 탭(원하는 경우 _blank로 변경)
+            link.target = "_self";
             img.src = spot.imageUrl || `images/beach_placeholder.jpg`;
             img.alt = spot.name;
-
             reason.textContent =
-                `파고: ${spot.data?.avgWvhgt ?? '-'}m, 파주기: ${spot.data?.avgWvpd ?? '-'}s, 풍속: ${spot.data?.avgWspd ?? '-'}m/s, 수온: ${spot.data?.avgWtem ?? '-'}°C, 서핑지수: ${spot.data?.totalIndex ?? '-'}`;
-            
+                `파고: ${spot.data?.avgWvhgt ?? '-'}m, 파주기: ${spot.data?.avgWvpd ?? '-'}s, ` +
+                `풍속: ${spot.data?.avgWspd ?? '-'}m/s, 수온: ${spot.data?.avgWtem ?? '-'}°C, ` +
+                `서핑지수: ${spot.data?.totalIndex ?? '-'}`;
             popupElement.style.display = 'block';
         }
     }
@@ -183,44 +175,31 @@ function isValidDate(selectedDate) {
 // 지역별 필터링 및 점수 계산
 async function updateAndShow(region, reqDate, selectedDate) {
     showLoading();
-    
-    // 날짜 유효성 체크
     if (!isValidDate(selectedDate)) {
         hideLoading();
         alert("오늘부터 7일 이내의 날짜만 조회할 수 있습니다.");
         return;
     }
-
-    // KMA API에서 모든 서핑 데이터 가져오기
     const items = await fetchKmaSurfDataAll(reqDate);
-
     let filteredBeaches = beaches;
     if (region !== "all") {
         filteredBeaches = beaches.filter(b => b.region === region);
     }
-
     const results = [];
     let selectedBeachInfo = null; // 선택된 특정 해수욕장 정보를 저장할 변수
-
     for (const beach of filteredBeaches) {
         const item = findTodayMorningItem(items, beach.spotName);
         if (item) {
             const score = calculateScore(item);
             results.push({ ...beach, score, data: item });
-
-            // region이 "all"이 아닐 때 첫 매칭 해수욕장 정보 업데이트
             if (region !== "all" && !selectedBeachInfo && beach.region === region && beach.spotName === item.surfPlcNm) {
                 selectedBeachInfo = { ...beach, score, data: item };
             }
         } else {
-            // 데이터 없음 → 0점 처리하지만 상세 정보에는 포함하지 않음
             results.push({ ...beach, score: 0, data: {} });
         }
     }
-
     results.sort((a, b) => b.score - a.score);
-
-    // 추천 결과가 모두 0점이거나 데이터 없음
     const validResults = results.filter(r => r.score > 0 && r.data && Object.keys(r.data).length > 0);
     if (validResults.length === 0) {
         hideLoading();
@@ -232,11 +211,8 @@ async function updateAndShow(region, reqDate, selectedDate) {
         }
         return;
     }
-
     hideLoading();
-    showPopupsWithApi(validResults.slice(0, 3)); // 상위 3개 팝업 표시
-
-    // 특정 해수욕장의 날씨 정보 표시 (region이 "all"이 아닐 경우)
+    showPopupsWithApi(validResults.slice(0, 3));
     const weatherInfoDisplay = document.getElementById('weatherInfo');
     if (region !== "all" && selectedBeachInfo) {
         weatherInfoDisplay.innerHTML = `<h3>${selectedBeachInfo.name} (${selectedBeachInfo.region}) - ${selectedDate.toLocaleDateString('ko-KR')} 오전 예측 날씨</h3>`;
@@ -254,10 +230,8 @@ async function updateAndShow(region, reqDate, selectedDate) {
     }
 }
 
-
 // --- DOMContentLoaded Event Listener ---
 document.addEventListener('DOMContentLoaded', function () {
-    // Flatpickr 초기화 (캘린더 항상 보이도록 inline 설정)
     const calendarInput = document.querySelector("#calendar input");
     if (calendarInput) {
         flatpickr(calendarInput, {
@@ -265,37 +239,31 @@ document.addEventListener('DOMContentLoaded', function () {
             defaultDate: "today",
             locale: "ko",
             minDate: "today",
-            maxDate: new Date().fp_incr(6), // 오늘 포함 7일 뒤까지
+            maxDate: new Date().fp_incr(6),
             inline: true
         });
     } else {
         console.error("Calendar input element not found for Flatpickr initialization.");
     }
-
-    // "검색" 버튼 이벤트 연결
     const searchButton = document.getElementById('searchBtn');
     if (searchButton) {
         searchButton.onclick = function () {
             const region = document.getElementById('regionSelect').value;
-            let selectedDate = new Date(); // 기본값: 오늘
+            let selectedDate = new Date();
             if (flatpickr && calendarInput && calendarInput._flatpickr) {
                 const fpInstance = calendarInput._flatpickr;
                 if (fpInstance.selectedDates.length > 0) {
                     selectedDate = fpInstance.selectedDates[0];
                 }
             }
-            // 기존 YYYYMMDD 형식에서 "00"을 뒤에 추가하여 YYYYMMDD00 형식으로 변환
-            const reqDate = selectedDate.toISOString().slice(0, 10).replace(/-/g, '') + "00";
+            const reqDate = selectedDate.toISOString().slice(0,10).replace(/-/g, '') + "00";
             updateAndShow(region, reqDate, selectedDate);
         };
     } else {
         console.error("Search button element not found.");
     }
-
-    // 팝업 닫기 기능 연결
     const popupBg = document.getElementById('popupBg');
     const popupCloseX = document.getElementById('popupCloseX');
-
     if (popupBg) {
         popupBg.onclick = function () {
             for (let i = 1; i <= 3; i++) {
@@ -308,7 +276,6 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
         console.error("Popup background element not found.");
     }
-
     if (popupCloseX) {
         popupCloseX.onclick = function () {
             for (let i = 1; i <= 3; i++) {
@@ -321,7 +288,6 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
         console.error("Popup close button element not found.");
     }
-
     console.log("Surf Info Website Loaded");
 });
 
