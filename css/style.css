@@ -80,7 +80,7 @@ main, section, .hero-section__container {
     filter: brightness(0.9);
     object-position: 60% 60%;
     border-radius: 6px;
-    object-fit: fill;
+    object-fit: cover; /* fill 대신 cover 사용 */
 }
 .hero-section__content {
     position: relative;
@@ -188,7 +188,7 @@ main, section, .hero-section__container {
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
     z-index: 1050; /* 다른 요소 위에 표시 */
     width: 90%;
-    max-width: 400px;
+    max-width: 320px; /* 기존 400px에서 조정 */
     box-sizing: border-box;
     text-align: center;
     animation: fadeIn 0.3s ease-out;
@@ -221,9 +221,11 @@ main, section, .hero-section__container {
     line-height: 1.5;
     margin-bottom: 0;
 }
+/* 기존 팝업 위치 */
 #recommendPopup1 { top: 20%; }
 #recommendPopup2 { top: 42%; }
 #recommendPopup3 { top: 64%; }
+
 
 /* ===== 반응형 디자인 ===== */
 @media (max-width: 768px) {
@@ -238,8 +240,8 @@ main, section, .hero-section__container {
     }
 
     #regionSelect, #calendarInput, #searchBtn {
-        width: 100%; /* 버튼과 입력창을 화면 너비에 맞게 조정 */
-        max-width: 300px; /* 최대 너비 제한 */
+        width: 90%; /* 화면 너비에 맞게 조정 */
+        max-width: 280px; /* 최대 너비 제한 */
         height: 40px; /* 높이 조정 */
     }
 
@@ -266,11 +268,24 @@ main, section, .hero-section__container {
     .recommend-popup p {
         font-size: 1rem; /* 팝업 내용 크기 줄이기 */
     }
+
+    /* 팝업 위치 조정 */
+    #recommendPopup1 { top: 15%; transform: translate(-50%, 0); }
+    #recommendPopup2 { top: 45%; transform: translate(-50%, 0); }
+    #recommendPopup3 { top: 75%; transform: translate(-50%, 0); }
 }
 
 @media (max-width: 480px) {
+    body {
+        font-size: 14px; /* 기본 폰트 크기 조정 */
+    }
     .title-banner__logo h1 {
         font-size: 1.5rem;
+        margin: 0 0 0 16px; /* 좌측 마진 줄이기 */
+    }
+    .title-banner__nav ul {
+        margin: 0 16px 0 0; /* 우측 마진 줄이기 */
+        gap: 12px; /* 메뉴 항목 간 간격 줄이기 */
     }
     .title-banner__nav a {
         font-size: 0.9rem;
@@ -279,8 +294,19 @@ main, section, .hero-section__container {
     .hero-section__content h2 {
         font-size: 2rem;
     }
+    .hero-section__content p {
+        font-size: 1rem;
+    }
+    .recommend-popup {
+        width: 95%; /* 더 작은 화면에서 너비 증가 */
+        max-width: 280px; /* 더 작은 화면에서 최대 너비 조정 */
+        padding: 15px 20px; /* 팝업 내부 여백 조정 */
+    }
     .recommend-popup h3 {
         font-size: 1.2rem;
+    }
+    .recommend-popup p {
+        font-size: 0.9rem; /* 팝업 내 상세 정보 폰트 크기 조정 */
     }
 }
 
