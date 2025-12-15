@@ -1,9 +1,6 @@
-// Surfly Detail Page Logic
-// Fetches real KMA API data for specific beach pages.
-
 // KMA API Fetcher (Duplicated from script.js for standalone safety)
 async function fetchKmaSurfDataForDetail(reqDate) {
-    const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=360`;
+    const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=300`;
     try {
         const res = await fetch(url);
         const json = await res.json();

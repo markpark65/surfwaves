@@ -51,28 +51,27 @@ function hideLoading() {
 
 // 기상청 서핑지수 API에서 전체 데이터 받아오기 (프록시 사용)
 async function fetchKmaSurfDataAll(reqDate) {
-    // 300은 성공, 500은 실패. 360으로 시도 (전체 해변 커버 시도)
-    const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=360`;
+    // 300은 안전한 API 제한 값.
+    const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=300`;
 
     try {
         const res = await fetch(url);
         const json = await res.json();
-        console.log("Full KMA Response:", json); // 디버깅
+        console.log("Full KMA Response:", json);
 
-        // 구조가 { response: { header: ... } } 인지 { header: ... } 인지 확인
-        const header = json.response?.header || json.header;
-
-        if (!res.ok || (header && header.resultCode !== "00")) {
-            console.error("API Error Code:", header?.resultCode);
-            console.error("API Error Msg:", header?.resultMsg);
+        // 에러 체크
+        if (json.error) {
+            console.error("Proxy Error:", json.error);
+            return [];
         }
 
         const items = json.response?.body?.items?.item || [];
         console.log("Parsed Items Count:", items.length);
 
+        // 디버깅: API에서 반환된 모든 해수욕장 이름 출력
         if (items.length > 0) {
             const availableSpots = [...new Set(items.map(i => i.surfPlcNm))];
-            console.log("Available Spots (First 10):", availableSpots.slice(0, 10));
+            console.log("Available Spots (API):", availableSpots);
         }
 
         return items;
