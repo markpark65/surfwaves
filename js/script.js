@@ -106,9 +106,16 @@ function findBestForecastItem(items, spotName, selectedDate) {
     if (spotItems.length === 0) {
         if (spotName === '곽지해수욕장') {
             console.log(`[Debug] Checking 곽지. TargetDate: '${targetDateStr}'`);
+            console.log(`[Debug] Items Length: ${items.length}`);
+            if (items.length > 0) console.log(`[Debug] First Item:`, items[0]);
+
+            // 모든 이름 출력 (중복 제거)
+            const allNames = [...new Set(items.map(i => i.surfPlcNm))];
+            console.log(`[Debug] All Names in Items:`, allNames);
+
             items.forEach(i => {
-                if (i.surfPlcNm.includes('곽지')) {
-                    console.log(`Found candidate: Name='${i.surfPlcNm}', Date='${i.predcYmd}', MatchName=${i.surfPlcNm === spotName}, MatchDate=${i.predcYmd === targetDateStr}`);
+                if (i.surfPlcNm && i.surfPlcNm.includes('곽지')) {
+                    console.log(`Found candidate: Name='${i.surfPlcNm}', Date='${i.predcYmd}'`);
                 }
             });
         }
