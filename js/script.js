@@ -253,13 +253,26 @@ async function updateAndShow(region, reqDate, selectedDate) {
         }
     }
 
+    // 서핑지수 문자열 -> 숫자 변환 (정렬/필터링용)
+    function convertTotalIndexToScore(indexStr) {
+        if (!indexStr) return 0;
+        const mapping = {
+            "매우좋음": 5,
+            "좋음": 4,
+            "보통": 3,
+            "나쁨": 2,
+            "매우나쁨": 1
+        };
+        return mapping[indexStr] || 0;
+    }
+
     // 정렬 (서핑지수 -> 자체점수 -> 파고)
     // 1순위: 기상청 서핑지수 (totalIndex)
     // 2순위: 자체 계산 점수 (calculateScore)
     // 3순위: 파고 (avgWvhgt)
     results.sort((a, b) => {
-        const totalIndexA = Number(a.data?.totalIndex) || 0;
-        const totalIndexB = Number(b.data?.totalIndex) || 0;
+        const totalIndexA = convertTotalIndexToScore(a.data?.totalIndex);
+        const totalIndexB = convertTotalIndexToScore(b.data?.totalIndex);
 
         if (totalIndexA !== totalIndexB) {
             return totalIndexB - totalIndexA;
@@ -274,7 +287,7 @@ async function updateAndShow(region, reqDate, selectedDate) {
         return waveB - waveA;
     });
 
-    const validResults = results.filter(r => (r.score > 0 || (Number(r.data?.totalIndex) || 0) > 0) && r.data && Object.keys(r.data).length > 0);
+    const validResults = results.filter(r => (r.score > 0 || convertTotalIndexToScore(r.data?.totalIndex) > 0) && r.data && Object.keys(r.data).length > 0);
 
     if (validResults.length === 0) {
         hideLoading();
