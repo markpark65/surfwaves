@@ -105,19 +105,7 @@ function findBestForecastItem(items, spotName, selectedDate) {
     // 디버깅: 해당 날짜 데이터가 없는 경우 확인
     if (spotItems.length === 0) {
         if (spotName === '곽지해수욕장') {
-            console.log(`[Debug] Checking 곽지. TargetDate: '${targetDateStr}'`);
-            console.log(`[Debug] Items Length: ${items.length}`);
-            if (items.length > 0) console.log(`[Debug] First Item:`, items[0]);
-
-            // 모든 이름 출력 (중복 제거)
-            const allNames = [...new Set(items.map(i => i.surfPlcNm))];
-            console.log(`[Debug] All Names in Items:`, allNames);
-
-            items.forEach(i => {
-                if (i.surfPlcNm && i.surfPlcNm.includes('곽지')) {
-                    console.log(`Found candidate: Name='${i.surfPlcNm}', Date='${i.predcYmd}'`);
-                }
-            });
+            // console.log(`[Debug] Checking 곽지. TargetDate: '${targetDateStr}'`);
         }
         return null;
     }
@@ -384,8 +372,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // toISOString 이슈 수정 -> 로컬 날짜 문자열 생성 (YYYYMMDD00/12 형식은 아님, API 스펙에 맞춰 YYYYMMDD + '00')
             // 기상청 API는 보통 호출 시점 날짜(BaseDate)를 요구하거나 예보 날짜를 요구함.
-            // 여기서는 기존 로직대로 날짜 + 00 형태 유지하되 로컬 시간 사용
-            const reqDate = getLocalYYYYMMDD(selectedDate) + "00";
+            // FIXME: 미래 날짜를 BaseDate로 요청하면 데이터가 없음! 무조건 "오늘"을 기준으로 요청해야 함.
+            const today = new Date();
+            const reqDate = getLocalYYYYMMDD(today) + "00";
 
             updateAndShow(region, reqDate, selectedDate);
         };
