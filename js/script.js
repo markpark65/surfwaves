@@ -104,7 +104,14 @@ function findBestForecastItem(items, spotName, selectedDate) {
 
     // 디버깅: 해당 날짜 데이터가 없는 경우 확인
     if (spotItems.length === 0) {
-        // console.log(`No data for ${spotName} on ${targetDateStr}`);
+        if (spotName === '곽지해수욕장') {
+            console.log(`[Debug] Checking 곽지. TargetDate: '${targetDateStr}'`);
+            items.forEach(i => {
+                if (i.surfPlcNm.includes('곽지')) {
+                    console.log(`Found candidate: Name='${i.surfPlcNm}', Date='${i.predcYmd}', MatchName=${i.surfPlcNm === spotName}, MatchDate=${i.predcYmd === targetDateStr}`);
+                }
+            });
+        }
         return null;
     }
 
