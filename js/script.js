@@ -17,8 +17,8 @@ const beaches = [
     // 양양
     { name: "죽도해수욕장", region: "양양", spotName: "죽도해수욕장", imageUrl: "images/yangyang_jukdo.jpg", pageUrl: "recommend(yangyang)/jukdo.html" },
     { name: "인구해변", region: "양양", spotName: "인구해수욕장", imageUrl: "images/yangyang_ingu.jpg", pageUrl: "recommend(yangyang)/ingu.html" },
-    { name: "서피비치", region: "양양", spotName: "서피비치해수욕장", imageUrl: "images/yangyang_surfyy.jpg", pageUrl: "recommend(yangyang)/surfyy.html" },
-    { name: "38선해변", region: "양양", spotName: "38선해수욕장", imageUrl: "images/yangyang_38line.jpg", pageUrl: "recommend(yangyang)/38line.html" },
+    { name: "서피비치", region: "양양", spotName: "하조대해수욕장", imageUrl: "images/yangyang_surfyy.jpg", pageUrl: "recommend(yangyang)/surfyy.html" },
+    { name: "38선해변", region: "양양", spotName: "기사문해수욕장", imageUrl: "images/yangyang_38line.jpg", pageUrl: "recommend(yangyang)/38line.html" },
     { name: "낙산해수욕장", region: "양양", spotName: "낙산해수욕장", imageUrl: "images/yangyang_naksan.jpg", pageUrl: "recommend(yangyang)/naksan.html" },
     { name: "갯마을해변", region: "양양", spotName: "갯마을해수욕장", imageUrl: "images/yangyang_gaetmaeul.jpg", pageUrl: "recommend(yangyang)/gaetmaeul.html" },
     // 포항
@@ -51,7 +51,7 @@ function hideLoading() {
 
 // 기상청 서핑지수 API에서 전체 데이터 받아오기 (프록시 사용)
 async function fetchKmaSurfDataAll(reqDate) {
-    const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=300`;
+    const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=2000`;
     try {
         const res = await fetch(url);
         if (!res.ok) {
@@ -60,6 +60,9 @@ async function fetchKmaSurfDataAll(reqDate) {
         }
         const json = await res.json();
         console.log("KMA API 응답:", json);
+        // 디버깅: API에서 반환된 모든 해수욕장 이름 출력
+        const availableSpots = [...new Set(json.response?.body?.items?.item?.map(i => i.surfPlcNm) || [])];
+        console.log("Available Spots (API):", availableSpots);
         return json.response?.body?.items?.item || [];
     } catch (e) {
         console.error("Failed to fetch KMA Surf Data:", e);
