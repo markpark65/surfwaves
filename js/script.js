@@ -51,25 +51,26 @@ function hideLoading() {
 
 // 기상청 서핑지수 API에서 전체 데이터 받아오기 (프록시 사용)
 async function fetchKmaSurfDataAll(reqDate) {
-    // API 제한(300~XXX)을 피하기 위해 300씩 2번 요청 (총 600개 커버)
-    const url1 = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=300&pageNo=1`;
-    const url2 = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=300&pageNo=2`;
+    // 300은 부족하고 900은 에러남. 500으로 시도.
+    const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=500`;
 
     try {
-        const [res1, res2] = await Promise.all([fetch(url1), fetch(url2)]);
+        const res = await fetch(url);
+        const json = await res.json();
+        console.log("Full KMA Response:", json); // 디버깅용 전체 로그
 
-        // 둘 중 하나라도 살리면 좋지만, 간단히 둘 다 시도
-        const list1 = res1.ok ? (await res1.json()).response?.body?.items?.item || [] : [];
-        const list2 = res2.ok ? (await res2.json()).response?.body?.items?.item || [] : [];
+        if (!res.ok || json.response?.header?.resultCode !== "00") {
+            console.error("API Error:", json.response?.header?.resultMsg);
+        }
 
-        const combined = [...list1, ...list2];
+        const items = json.response?.body?.items?.item || [];
+        console.log("Parsed Items Count:", items.length);
 
-        console.log("KMA API Items:", combined.length);
         // 디버깅: API에서 반환된 모든 해수욕장 이름 출력
-        const availableSpots = [...new Set(combined.map(i => i.surfPlcNm))];
-        console.log("Available Spots (API):", availableSpots);
+        const availableSpots = [...new Set(items.map(i => i.surfPlcNm))];
+        console.log("Available Spots:", availableSpots);
 
-        return combined;
+        return items;
     } catch (e) {
         console.error("Failed to fetch KMA Surf Data:", e);
         return [];
