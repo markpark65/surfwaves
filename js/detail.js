@@ -3,12 +3,15 @@
 
 // KMA API Fetcher (Duplicated from script.js for standalone safety)
 async function fetchKmaSurfDataForDetail(reqDate) {
-    const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=900`;
+    // API 제한 우회: 300 * 2 pages
+    const url1 = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=300&pageNo=1`;
+    const url2 = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=300&pageNo=2`;
+
     try {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error("Network response was not ok");
-        const json = await res.json();
-        return json.response?.body?.items?.item || [];
+        const [res1, res2] = await Promise.all([fetch(url1), fetch(url2)]);
+        const list1 = res1.ok ? (await res1.json()).response?.body?.items?.item || [] : [];
+        const list2 = res2.ok ? (await res2.json()).response?.body?.items?.item || [] : [];
+        return [...list1, ...list2];
     } catch (e) {
         console.error("API Fetch Error:", e);
         return [];

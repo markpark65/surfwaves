@@ -51,23 +51,27 @@ function hideLoading() {
 
 // 기상청 서핑지수 API에서 전체 데이터 받아오기 (프록시 사용)
 async function fetchKmaSurfDataAll(reqDate) {
-    const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=900`;
+    // API 제한(300~XXX)을 피하기 위해 300씩 2번 요청 (총 600개 커버)
+    const url1 = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=300&pageNo=1`;
+    const url2 = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=300&pageNo=2`;
+
     try {
-        const res = await fetch(url);
-        if (!res.ok) {
-            const errorText = await res.text();
-            throw new Error(`HTTP error! status: ${res.status}, Message: ${errorText}`);
-        }
-        const json = await res.json();
-        console.log("KMA API 응답:", json);
+        const [res1, res2] = await Promise.all([fetch(url1), fetch(url2)]);
+
+        // 둘 중 하나라도 살리면 좋지만, 간단히 둘 다 시도
+        const list1 = res1.ok ? (await res1.json()).response?.body?.items?.item || [] : [];
+        const list2 = res2.ok ? (await res2.json()).response?.body?.items?.item || [] : [];
+
+        const combined = [...list1, ...list2];
+
+        console.log("KMA API Items:", combined.length);
         // 디버깅: API에서 반환된 모든 해수욕장 이름 출력
-        const availableSpots = [...new Set(json.response?.body?.items?.item?.map(i => i.surfPlcNm) || [])];
+        const availableSpots = [...new Set(combined.map(i => i.surfPlcNm))];
         console.log("Available Spots (API):", availableSpots);
-        return json.response?.body?.items?.item || [];
+
+        return combined;
     } catch (e) {
         console.error("Failed to fetch KMA Surf Data:", e);
-        // alert 실패 메시지는 너무 자주 떠서 UX 저하 우려, 콘솔에만 기록하거나 토스트 필요
-        // 여기서는 데이터 없음으로 처리
         return [];
     }
 }
