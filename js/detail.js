@@ -3,11 +3,22 @@
 
 // KMA API Fetcher (Duplicated from script.js for standalone safety)
 async function fetchKmaSurfDataForDetail(reqDate) {
-    const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=500`;
     try {
-        const res = await fetch(url);
-        const json = await res.json();
-        return json.response?.body?.items?.item || [];
+        const fetchPage = async (page) => {
+            const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=300&pageNo=${page}`;
+            const res = await fetch(url);
+            const json = await res.json();
+            return json.response?.body?.items?.item || [];
+        };
+
+        const page1 = await fetchPage(1);
+        let combined = [...page1];
+
+        if (page1.length >= 300) {
+            const page2 = await fetchPage(2);
+            combined = [...combined, ...page2];
+        }
+        return combined;
     } catch (e) {
         console.error("API Fetch Error:", e);
         return [];

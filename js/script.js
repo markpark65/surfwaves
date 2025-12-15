@@ -51,30 +51,37 @@ function hideLoading() {
 
 // 기상청 서핑지수 API에서 전체 데이터 받아오기 (프록시 사용)
 async function fetchKmaSurfDataAll(reqDate) {
-    // 300은 부족하고 900은 에러남. 500으로 시도.
-    const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=500`;
-
-    try {
-        const res = await fetch(url);
-        const json = await res.json();
-        console.log("Full KMA Response:", json); // 디버깅용 전체 로그
-
-        if (!res.ok || json.response?.header?.resultCode !== "00") {
-            console.error("API Error:", json.response?.header?.resultMsg);
+    // API 제한(300~XXX)을 피하기 위해 안전하게 순차적으로 요청
+    const fetchPage = async (page) => {
+        const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=300&pageNo=${page}`;
+        try {
+            const res = await fetch(url);
+            const json = await res.json();
+            console.log(`Page ${page} Response:`, json.response?.header?.resultCode); // 디버깅
+            return json.response?.body?.items?.item || [];
+        } catch (e) {
+            console.error(`Page ${page} Fetch Error:`, e);
+            return [];
         }
+    };
 
-        const items = json.response?.body?.items?.item || [];
-        console.log("Parsed Items Count:", items.length);
+    // 1페이지 요청
+    const page1 = await fetchPage(1);
+    let combined = [...page1];
 
-        // 디버깅: API에서 반환된 모든 해수욕장 이름 출력
-        const availableSpots = [...new Set(items.map(i => i.surfPlcNm))];
-        console.log("Available Spots:", availableSpots);
-
-        return items;
-    } catch (e) {
-        console.error("Failed to fetch KMA Surf Data:", e);
-        return [];
+    // 1페이지가 꽉 찼다면 2페이지도 있을 가능성 높음 -> 2페이지 요청
+    if (page1.length >= 300) {
+        console.log("Page 1 full, fetching Page 2...");
+        const page2 = await fetchPage(2);
+        combined = [...combined, ...page2];
     }
+
+    console.log("Total Items:", combined.length);
+    // 디버깅: API에서 반환된 모든 해수욕장 이름 출력
+    const availableSpots = [...new Set(combined.map(i => i.surfPlcNm))];
+    console.log("Available Spots (API):", availableSpots);
+
+    return combined;
 }
 
 /**
