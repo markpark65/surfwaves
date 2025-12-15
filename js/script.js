@@ -93,8 +93,20 @@ function findBestForecastItem(items, spotName, selectedDate) {
     const now = new Date();
     const isToday = selectedDate.toDateString() === now.toDateString();
 
-    // 해당 지역의 데이터만 필터링
-    const spotItems = items.filter(item => item.surfPlcNm === spotName);
+    // YYYY-MM-DD 형식으로 날짜 변환 (API의 predcYmd와 비교하기 위함)
+    const year = selectedDate.getFullYear();
+    const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+    const day = String(selectedDate.getDate()).padStart(2, '0');
+    const targetDateStr = `${year}-${month}-${day}`;
+
+    // 해당 지역 AND 해당 날짜 데이터만 필터링
+    const spotItems = items.filter(item => item.surfPlcNm === spotName && item.predcYmd === targetDateStr);
+
+    // 디버깅: 해당 날짜 데이터가 없는 경우 확인
+    if (spotItems.length === 0) {
+        // console.log(`No data for ${spotName} on ${targetDateStr}`);
+        return null;
+    }
 
     let preferredTime = "오전";
     // 오늘이고 오후 12시가 지났다면 오후 데이터를 우선
@@ -110,12 +122,28 @@ function findBestForecastItem(items, spotName, selectedDate) {
         bestItem = spotItems.find(item => item.predcNoonSeCd === (preferredTime === "오전" ? "오후" : "오전"));
     }
 
-    // 3순위: 그래도 없으면 아무거나 (데이터 구조상 surfPlcNm으로 필터했으므로)
+    // 3순위: 그래도 없으면 해당 날짜의 첫번째 데이터
     if (!bestItem && spotItems.length > 0) {
         bestItem = spotItems[0];
     }
 
     return bestItem || null;
+}
+
+// ... (calculateScore function remains same) ...
+
+// ... inside updateAndShow ...
+for (const beach of filteredBeaches) {
+    const item = findBestForecastItem(items, beach.spotName, selectedDate);
+
+    if (item) {
+        const score = calculateScore(item);
+        console.log(`[${beach.name}] Score: ${score}, TotalIndex: ${item.totalIndex}`); // Debug log
+        results.push({ ...beach, score, data: item });
+    } else {
+        console.log(`[${beach.name}] No matching item found.`);
+        results.push({ ...beach, score: 0, data: {} });
+    }
 }
 
 // 추천 알고리즘
@@ -254,13 +282,16 @@ async function updateAndShow(region, reqDate, selectedDate) {
     const results = [];
 
     for (const beach of filteredBeaches) {
-        // 기존: 무조건 오전 데이터 -> 수정: 지능형 시간 선택
         const item = findBestForecastItem(items, beach.spotName, selectedDate);
 
         if (item) {
             const score = calculateScore(item);
+            // Debugging: 왜 필터링 되는지 확인
+            const tiScore = convertTotalIndexToScore(item.totalIndex);
+            console.log(`[${beach.name}] Score: ${score}, TI: ${item.totalIndex} (${tiScore})`);
             results.push({ ...beach, score, data: item });
         } else {
+            // console.log(`[${beach.name}] No item found.`);
             results.push({ ...beach, score: 0, data: {} });
         }
     }
