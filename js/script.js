@@ -51,37 +51,35 @@ function hideLoading() {
 
 // 기상청 서핑지수 API에서 전체 데이터 받아오기 (프록시 사용)
 async function fetchKmaSurfDataAll(reqDate) {
-    // API 제한(300~XXX)을 피하기 위해 안전하게 순차적으로 요청
-    const fetchPage = async (page) => {
-        const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=300&pageNo=${page}`;
-        try {
-            const res = await fetch(url);
-            const json = await res.json();
-            console.log(`Page ${page} Response:`, json.response?.header?.resultCode); // 디버깅
-            return json.response?.body?.items?.item || [];
-        } catch (e) {
-            console.error(`Page ${page} Fetch Error:`, e);
-            return [];
+    // 300은 성공, 500은 실패. 360으로 시도 (전체 해변 커버 시도)
+    const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=360`;
+
+    try {
+        const res = await fetch(url);
+        const json = await res.json();
+        console.log("Full KMA Response:", json); // 디버깅
+
+        // 구조가 { response: { header: ... } } 인지 { header: ... } 인지 확인
+        const header = json.response?.header || json.header;
+
+        if (!res.ok || (header && header.resultCode !== "00")) {
+            console.error("API Error Code:", header?.resultCode);
+            console.error("API Error Msg:", header?.resultMsg);
         }
-    };
 
-    // 1페이지 요청
-    const page1 = await fetchPage(1);
-    let combined = [...page1];
+        const items = json.response?.body?.items?.item || [];
+        console.log("Parsed Items Count:", items.length);
 
-    // 1페이지가 꽉 찼다면 2페이지도 있을 가능성 높음 -> 2페이지 요청
-    if (page1.length >= 300) {
-        console.log("Page 1 full, fetching Page 2...");
-        const page2 = await fetchPage(2);
-        combined = [...combined, ...page2];
+        if (items.length > 0) {
+            const availableSpots = [...new Set(items.map(i => i.surfPlcNm))];
+            console.log("Available Spots (First 10):", availableSpots.slice(0, 10));
+        }
+
+        return items;
+    } catch (e) {
+        console.error("Failed to fetch KMA Surf Data:", e);
+        return [];
     }
-
-    console.log("Total Items:", combined.length);
-    // 디버깅: API에서 반환된 모든 해수욕장 이름 출력
-    const availableSpots = [...new Set(combined.map(i => i.surfPlcNm))];
-    console.log("Available Spots (API):", availableSpots);
-
-    return combined;
 }
 
 /**
