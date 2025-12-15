@@ -57,7 +57,6 @@ async function fetchKmaSurfDataAll(reqDate) {
     try {
         const res = await fetch(url);
         const json = await res.json();
-        console.log("Full KMA Response:", json);
 
         // 에러 체크
         if (json.error) {
@@ -69,12 +68,13 @@ async function fetchKmaSurfDataAll(reqDate) {
         const r = json.response || json;
         const items = r.body?.items?.item || [];
 
-        console.log("Parsed Items Count:", items.length);
-
-        // 디버깅: API에서 반환된 모든 해수욕장 이름 출력
+        // 3. 유효한 데이터면 캐싱
         if (items.length > 0) {
-            const availableSpots = [...new Set(items.map(i => i.surfPlcNm))];
-            console.log("Available Spots (API):", availableSpots);
+            const cacheData = {
+                timestamp: Date.now(),
+                data: items
+            };
+            sessionStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
         }
 
         return items;
@@ -107,9 +107,6 @@ function findBestForecastItem(items, spotName, selectedDate) {
 
     // 디버깅: 해당 날짜 데이터가 없는 경우 확인
     if (spotItems.length === 0) {
-        if (spotName === '곽지해수욕장') {
-            // console.log(`[Debug] Checking 곽지. TargetDate: '${targetDateStr}'`);
-        }
         return null;
     }
 
@@ -185,7 +182,7 @@ function calculateScore(data) {
 }
 
 // 팝업에 API 결과 반영 (동적 생성)
-function showPopupsWithApi(topBeaches) {
+function showPopupsWithApi(topBeaches, selectedDate) {
     const popupContainer = document.getElementById('popupContainer');
     const bg = document.getElementById('popupBg');
     const closeX = document.getElementById('popupCloseX');
@@ -220,9 +217,16 @@ function showPopupsWithApi(topBeaches) {
                 </div>
             `;
 
+            // 날짜 파라미터 추가
+            const year = selectedDate.getFullYear();
+            const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+            const day = String(selectedDate.getDate()).padStart(2, '0');
+            const dateParam = `?date=${year}-${month}-${day}`;
+            const finalUrl = spot.pageUrl ? spot.pageUrl + dateParam : '#';
+
             card.innerHTML = `
                 <div class="card-rank">${index + 1}</div>
-                <h3><a href="${spot.pageUrl || '#'}" target="_blank">${spot.name} &rarr;</a></h3>
+                <h3><a href="${finalUrl}" target="_blank">${spot.name} &rarr;</a></h3>
                 <img src="${spot.imageUrl || 'images/beach_placeholder.jpg'}" alt="${spot.name}">
                 ${detailHtml}
             `;
@@ -278,11 +282,8 @@ async function updateAndShow(region, reqDate, selectedDate) {
 
         if (item) {
             const score = calculateScore(item);
-            const tiScore = convertTotalIndexToScore(item.totalIndex);
-            console.log(`[${beach.name}] FOUND Score: ${score}, TI: ${item.totalIndex}`);
             results.push({ ...beach, score, data: item });
         } else {
-            console.log(`[${beach.name}] No item found. Looking for date: ${selectedDate.toDateString()}`);
             results.push({ ...beach, score: 0, data: {} });
         }
     }
@@ -326,12 +327,12 @@ async function updateAndShow(region, reqDate, selectedDate) {
     if (validResults.length === 0) {
         hideLoading();
         // 결과가 없어도 팝업을 띄워서 "결과 없음"을 보여줌 (UX 개선)
-        showPopupsWithApi([]);
+        showPopupsWithApi([], selectedDate);
         return;
     }
 
     hideLoading();
-    showPopupsWithApi(validResults);
+    showPopupsWithApi(validResults, selectedDate);
 
     // 날짜/날씨 정보 텍스트 업데이트 (옵션)
     const weatherInfoDisplay = document.getElementById('weatherInfo');
