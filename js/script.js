@@ -132,19 +132,6 @@ function findBestForecastItem(items, spotName, selectedDate) {
 
 // ... (calculateScore function remains same) ...
 
-// ... inside updateAndShow ...
-for (const beach of filteredBeaches) {
-    const item = findBestForecastItem(items, beach.spotName, selectedDate);
-
-    if (item) {
-        const score = calculateScore(item);
-        console.log(`[${beach.name}] Score: ${score}, TotalIndex: ${item.totalIndex}`); // Debug log
-        results.push({ ...beach, score, data: item });
-    } else {
-        console.log(`[${beach.name}] No matching item found.`);
-        results.push({ ...beach, score: 0, data: {} });
-    }
-}
 
 // 추천 알고리즘
 function calculateScore(data) {
