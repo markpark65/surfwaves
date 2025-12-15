@@ -273,12 +273,11 @@ async function updateAndShow(region, reqDate, selectedDate) {
 
         if (item) {
             const score = calculateScore(item);
-            // Debugging: 왜 필터링 되는지 확인
             const tiScore = convertTotalIndexToScore(item.totalIndex);
-            console.log(`[${beach.name}] Score: ${score}, TI: ${item.totalIndex} (${tiScore})`);
+            console.log(`[${beach.name}] FOUND Score: ${score}, TI: ${item.totalIndex}`);
             results.push({ ...beach, score, data: item });
         } else {
-            // console.log(`[${beach.name}] No item found.`);
+            console.log(`[${beach.name}] No item found. Looking for date: ${selectedDate.toDateString()}`);
             results.push({ ...beach, score: 0, data: {} });
         }
     }
