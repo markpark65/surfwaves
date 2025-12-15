@@ -4,7 +4,8 @@ async function fetchKmaSurfDataForDetail(reqDate) {
     try {
         const res = await fetch(url);
         const json = await res.json();
-        return json.response?.body?.items?.item || [];
+        const r = json.response || json;
+        return r.body?.items?.item || [];
     } catch (e) {
         console.error("API Fetch Error:", e);
         return [];

@@ -65,7 +65,10 @@ async function fetchKmaSurfDataAll(reqDate) {
             return [];
         }
 
-        const items = json.response?.body?.items?.item || [];
+        // 구조 유연성 확보: { response: { body: ... } } 또는 { body: ... }
+        const r = json.response || json;
+        const items = r.body?.items?.item || [];
+
         console.log("Parsed Items Count:", items.length);
 
         // 디버깅: API에서 반환된 모든 해수욕장 이름 출력
