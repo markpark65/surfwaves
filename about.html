@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surfly - 소개 & 문의</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <div class="title-banner">
+            <div class="title-banner__logo">
+                <h1><a href="index.html">Surfly</a></h1>
+            </div>
+            <nav class="title-banner__nav">
+                <ul>
+                    <li><a href="index.html">홈</a></li>
+                    <li><a href="login.html">로그인</a></li>
+                    <li><a href="commu.html">후기</a></li>
+                    <li><a href="about.html">문의</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="about-section">
+        <div class="about-container">
+            <!-- Service Intro -->
+            <section class="about-block">
+                <h2><i class="fa-solid fa-water"></i> About Surfly</h2>
+                <p>
+                    <strong>Surfly</strong>는 서퍼들을 위한 실시간 파도 예측 및 추천 서비스입니다.<br>
+                    기상청 공공데이터 포털의 바다누리 해양기상정보 API를 활용하여, 전국 주요 서핑 스팟의
+                    파고, 파주기, 풍속, 수온 정보를 분석하고 최적의 서핑 지수를 제공합니다.
+                </p>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <h4>정확한 데이터</h4>
+                        <p>기상청 API 실시간 연동</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fa-solid fa-thumbs-up"></i>
+                        <h4>스마트 추천</h4>
+                        <p>자체 알고리즘 기반 추천</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fa-solid fa-mobile-screen"></i>
+                        <h4>반응형</h4>
+                        <p>모바일 최적화 디자인</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Team / Info -->
+            <section class="about-block">
+                <h2><i class="fa-solid fa-users"></i> Team</h2>
+                <p>
+                    Surfly는 서핑을 사랑하는 개발자들이 모여 만들었습니다.<br>
+                    더 안전하고 즐거운 서핑 문화를 만들기 위해 노력합니다.
+                </p>
+            </section>
+
+            <!-- Contact Form -->
+            <section class="about-block">
+                <h2><i class="fa-solid fa-envelope"></i> Contact Us</h2>
+                <p>서비스 이용 중 불편한 점이나 제안사항이 있다면 언제든 문의해주세요.</p>
+                <form class="contact-form" onsubmit="alert('문의가 접수되었습니다. 감사합니다!'); return false;">
+                    <input type="text" placeholder="이름" required>
+                    <input type="email" placeholder="이메일" required>
+                    <textarea placeholder="문의 내용" rows="5" required></textarea>
+                    <button type="submit" class="submit-btn full-width">문의하기</button>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Surfly. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

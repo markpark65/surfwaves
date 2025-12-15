@@ -63,18 +63,47 @@ async function fetchKmaSurfDataAll(reqDate) {
         return json.response?.body?.items?.item || [];
     } catch (e) {
         console.error("Failed to fetch KMA Surf Data:", e);
-        alert("날씨 정보를 가져오는 데 실패했습니다. API 키와 서버 상태를 확인해주세요.");
+        // alert 실패 메시지는 너무 자주 떠서 UX 저하 우려, 콘솔에만 기록하거나 토스트 필요
+        // 여기서는 데이터 없음으로 처리
         return [];
     }
 }
 
-// 해수욕장별로 오전 데이터만 추출 (surfPlcNm 매칭)
-function findTodayMorningItem(items, spotName) {
-    const filtered = items.filter(
-        item => item.surfPlcNm === spotName && item.predcNoonSeCd === "오전"
-    );
-    if (filtered.length > 0) return filtered[0];
-    return items.find(item => item.surfPlcNm === spotName) || null;
+/**
+ * 선택된 날짜와 현재 시간에 맞춰 '오전' 또는 '오후' 예보를 지능적으로 선택합니다.
+ * - 선택된 날짜가 '오늘'인 경우:
+ *   - 현재 시간이 12시 이전이면 '오전' 우선, 없으면 '오후'
+ *   - 현재 시간이 12시 이후면 '오후' 우선, 없으면 '오전'
+ * - 선택된 날짜가 '미래'인 경우:
+ *   - 기본적으로 '오전' 데이터를 우선 보여줍니다 (하루 시작 기준).
+ */
+function findBestForecastItem(items, spotName, selectedDate) {
+    const now = new Date();
+    const isToday = selectedDate.toDateString() === now.toDateString();
+
+    // 해당 지역의 데이터만 필터링
+    const spotItems = items.filter(item => item.surfPlcNm === spotName);
+
+    let preferredTime = "오전";
+    // 오늘이고 오후 12시가 지났다면 오후 데이터를 우선
+    if (isToday && now.getHours() >= 12) {
+        preferredTime = "오후";
+    }
+
+    // 1순위: 선호 시간대
+    let bestItem = spotItems.find(item => item.predcNoonSeCd === preferredTime);
+
+    // 2순위: 선호 시간대 데이터가 없으면 반대 시간대 데이터
+    if (!bestItem) {
+        bestItem = spotItems.find(item => item.predcNoonSeCd === (preferredTime === "오전" ? "오후" : "오전"));
+    }
+
+    // 3순위: 그래도 없으면 아무거나 (데이터 구조상 surfPlcNm으로 필터했으므로)
+    if (!bestItem && spotItems.length > 0) {
+        bestItem = spotItems[0];
+    }
+
+    return bestItem || null;
 }
 
 // 추천 알고리즘
@@ -123,48 +152,56 @@ function calculateScore(data) {
     return score;
 }
 
-// 팝업에 API 결과 반영 (필드명 최신화)
-// 수정: 각 추천 해수욕장 객체의 pageUrl 속성을 사용해 링크 연결
+// 팝업에 API 결과 반영 (동적 생성)
 function showPopupsWithApi(topBeaches) {
-    // 모든 팝업 숨기기
-    document.getElementById('popupBg').style.display = 'none';
-    document.getElementById('popupCloseX').style.display = 'none';
-    for (let i = 1; i <= 3; i++) {
-        document.getElementById(`recommendPopup${i}`).style.display = 'none';
-    }
+    const popupContainer = document.getElementById('popupContainer');
+    const bg = document.getElementById('popupBg');
+    const closeX = document.getElementById('popupCloseX');
+
+    if (!popupContainer || !bg) return;
+
+    // 기존 내용 비우기
+    popupContainer.innerHTML = '';
 
     if (!topBeaches || topBeaches.length === 0) {
-        alert("추천할 해수욕장 정보가 없습니다.");
-        return;
+        // 결과 없음 표시
+        popupContainer.innerHTML = `
+            <div class="recommend-card no-result-card">
+                <h3>결과 없음</h3>
+                <p>해당 날짜/지역에 맞는 추천 데이터가 없습니다.</p>
+            </div>
+        `;
+    } else {
+        // 상위 3개 (혹은 그 이상) 아이템 생성
+        topBeaches.slice(0, 3).forEach((spot, index) => {
+            const card = document.createElement('div');
+            card.className = 'recommend-card';
+
+            const detailHtml = `
+                <div class="card-info">
+                    <strong>예측 시간: ${spot.data?.predcNoonSeCd || '-'}</strong><br/>
+                    파고: ${spot.data?.avgWvhgt ?? '-'}m<br/>
+                    파주기: ${spot.data?.avgWvpd ?? '-'}s<br/>
+                    풍속: ${spot.data?.avgWspd ?? '-'}m/s<br/>
+                    수온: ${spot.data?.avgWtem ?? '-'}°C<br/>
+                    <strong style="color:#2196f3;">서핑지수: ${spot.data?.totalIndex ?? '-'}</strong>
+                </div>
+            `;
+
+            card.innerHTML = `
+                <div class="card-rank">${index + 1}</div>
+                <h3><a href="${spot.pageUrl || '#'}" target="_blank">${spot.name} &rarr;</a></h3>
+                <img src="${spot.imageUrl || 'images/beach_placeholder.jpg'}" alt="${spot.name}">
+                ${detailHtml}
+            `;
+            popupContainer.appendChild(card);
+        });
     }
 
-    for (let i = 0; i < Math.min(topBeaches.length, 3); i++) {
-        const spot = topBeaches[i];
-        const popupElement = document.getElementById(`recommendPopup${i + 1}`);
-        const link = document.getElementById(`spotLink${i + 1}`);
-        const img = document.getElementById(`spotImg${i + 1}`);
-        const reason = document.getElementById(`spotReason${i + 1}`);
-
-        if (popupElement && link && img && reason) {
-            link.textContent = `${i + 1}순위: ${spot.name}`;
-            link.href = spot.pageUrl || "#";
-            link.target = "_blank";
-
-            img.src = spot.imageUrl || `images/beach_placeholder.jpg`;
-            img.alt = spot.name;
-
-            const detail =
-                `파고: ${spot.data?.avgWvhgt ?? '-'}m, 파주기: ${spot.data?.avgWvpd ?? '-'}s, ` +
-                `풍속: ${spot.data?.avgWspd ?? '-'}m/s, 수온: ${spot.data?.avgWtem ?? '-'}°C, ` +
-                `서핑지수: ${spot.data?.totalIndex ?? '-'}`;
-            reason.textContent = detail;
-
-            popupElement.style.display = 'block';
-        }
-    }
-
-    document.getElementById('popupBg').style.display = 'block';
-    document.getElementById('popupCloseX').style.display = 'flex';
+    // 팝업 표시
+    bg.style.display = 'flex'; // CSS flex centering
+    popupContainer.style.display = 'flex';
+    if (closeX) closeX.style.display = 'flex';
 }
 
 // 날짜 유효성 검사 (오늘~7일 뒤만 허용)
@@ -177,6 +214,14 @@ function isValidDate(selectedDate) {
     return selectedDate >= today && selectedDate <= maxDate;
 }
 
+// 로컬 시간 기준 YYYYMMDD 반환
+function getLocalYYYYMMDD(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}${month}${day}`;
+}
+
 // 지역별 필터링 및 점수 계산
 async function updateAndShow(region, reqDate, selectedDate) {
     showLoading();
@@ -185,53 +230,70 @@ async function updateAndShow(region, reqDate, selectedDate) {
         alert("오늘부터 7일 이내의 날짜만 조회할 수 있습니다.");
         return;
     }
+
+    // API 호출
     const items = await fetchKmaSurfDataAll(reqDate);
+
     let filteredBeaches = beaches;
     if (region !== "all") {
         filteredBeaches = beaches.filter(b => b.region === region);
     }
+
     const results = [];
-    let selectedBeachInfo = null; // 선택된 특정 해수욕장 정보를 저장할 변수
+
     for (const beach of filteredBeaches) {
-        const item = findTodayMorningItem(items, beach.spotName);
+        // 기존: 무조건 오전 데이터 -> 수정: 지능형 시간 선택
+        const item = findBestForecastItem(items, beach.spotName, selectedDate);
+
         if (item) {
             const score = calculateScore(item);
             results.push({ ...beach, score, data: item });
-            if (region !== "all" && !selectedBeachInfo && beach.region === region && beach.spotName === item.surfPlcNm) {
-                selectedBeachInfo = { ...beach, score, data: item };
-            }
         } else {
             results.push({ ...beach, score: 0, data: {} });
         }
     }
-    results.sort((a, b) => b.score - a.score);
-    const validResults = results.filter(r => r.score > 0 && r.data && Object.keys(r.data).length > 0);
+
+    // 정렬 (서핑지수 -> 자체점수 -> 파고)
+    // 1순위: 기상청 서핑지수 (totalIndex)
+    // 2순위: 자체 계산 점수 (calculateScore)
+    // 3순위: 파고 (avgWvhgt)
+    results.sort((a, b) => {
+        const totalIndexA = Number(a.data?.totalIndex) || 0;
+        const totalIndexB = Number(b.data?.totalIndex) || 0;
+
+        if (totalIndexA !== totalIndexB) {
+            return totalIndexB - totalIndexA;
+        }
+
+        if (b.score !== a.score) {
+            return b.score - a.score;
+        }
+
+        const waveA = Number(a.data?.avgWvhgt) || 0;
+        const waveB = Number(b.data?.avgWvhgt) || 0;
+        return waveB - waveA;
+    });
+
+    const validResults = results.filter(r => (r.score > 0 || (Number(r.data?.totalIndex) || 0) > 0) && r.data && Object.keys(r.data).length > 0);
+
     if (validResults.length === 0) {
         hideLoading();
-        alert("추천할 해수욕장 정보가 없습니다. 해당 날짜에 데이터가 없거나 예보가 제공되지 않습니다.");
-        document.getElementById('popupBg').style.display = 'none';
-        document.getElementById('popupCloseX').style.display = 'none';
-        for (let i = 1; i <= 3; i++) {
-            document.getElementById(`recommendPopup${i}`).style.display = 'none';
-        }
+        // 결과가 없어도 팝업을 띄워서 "결과 없음"을 보여줌 (UX 개선)
+        showPopupsWithApi([]);
         return;
     }
+
     hideLoading();
-    showPopupsWithApi(validResults.slice(0, 3));
+    showPopupsWithApi(validResults);
+
+    // 날짜/날씨 정보 텍스트 업데이트 (옵션)
     const weatherInfoDisplay = document.getElementById('weatherInfo');
-    if (region !== "all" && selectedBeachInfo) {
-        weatherInfoDisplay.innerHTML = `<h3>${selectedBeachInfo.name} (${selectedBeachInfo.region}) - ${selectedDate.toLocaleDateString('ko-KR')} 오전 예측 날씨</h3>`;
-        weatherInfoDisplay.innerHTML += `
-            <p>파고: ${selectedBeachInfo.data?.avgWvhgt ?? '-'}m</p>
-            <p>파주기: ${selectedBeachInfo.data?.avgWvpd ?? '-'}s</p>
-            <p>풍속: ${selectedBeachInfo.data?.avgWspd ?? '-'}m/s</p>
-            <p>수온: ${selectedBeachInfo.data?.avgWtem ?? '-'}°C</p>
-            <p>서핑지수: ${selectedBeachInfo.data?.totalIndex ?? '-'}</p>
-        `;
-    } else if (region === "all") {
-        weatherInfoDisplay.innerHTML = `<p>전체 지역 선택 시에는 개별 해수욕장의 상세 날씨 정보가 제공되지 않습니다. 특정 지역을 선택하여 상세 정보를 확인하세요.</p>`;
-    } else {
-        weatherInfoDisplay.innerHTML = `<p>선택된 지역의 날씨 정보를 찾을 수 없습니다.</p>`;
+    if (weatherInfoDisplay) {
+        if (region !== 'all') {
+            weatherInfoDisplay.innerHTML = `<h3>${region} 추천 서핑 스팟 (${selectedDate.toLocaleDateString('ko-KR')})</h3>`;
+        } else {
+            weatherInfoDisplay.innerHTML = `<h3>전체 지역 추천 서핑 스팟 (${selectedDate.toLocaleDateString('ko-KR')})</h3>`;
+        }
     }
 }
 
@@ -250,75 +312,51 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
         console.error("Calendar input element not found for Flatpickr initialization.");
     }
+
     const searchButton = document.getElementById('searchBtn');
     if (searchButton) {
         searchButton.onclick = function () {
             const region = document.getElementById('regionSelect').value;
-            let selectedDate = new Date();
+            let selectedDate = new Date(); // 기본값: 오늘
+
             if (flatpickr && calendarInput && calendarInput._flatpickr) {
                 const fpInstance = calendarInput._flatpickr;
                 if (fpInstance.selectedDates.length > 0) {
                     selectedDate = fpInstance.selectedDates[0];
                 }
             }
-            const reqDate = selectedDate.toISOString().slice(0,10).replace(/-/g, '') + "00";
+
+            // toISOString 이슈 수정 -> 로컬 날짜 문자열 생성 (YYYYMMDD00/12 형식은 아님, API 스펙에 맞춰 YYYYMMDD + '00')
+            // 기상청 API는 보통 호출 시점 날짜(BaseDate)를 요구하거나 예보 날짜를 요구함.
+            // 여기서는 기존 로직대로 날짜 + 00 형태 유지하되 로컬 시간 사용
+            const reqDate = getLocalYYYYMMDD(selectedDate) + "00";
+
             updateAndShow(region, reqDate, selectedDate);
         };
     } else {
         console.error("Search button element not found.");
     }
+
+    // 팝업 닫기 이벤트
     const popupBg = document.getElementById('popupBg');
     const popupCloseX = document.getElementById('popupCloseX');
+
+    function closePopup() {
+        if (popupBg) popupBg.style.display = 'none';
+        // popupContainer는 자동으로 숨겨짐 (부모가 display:none)
+    }
+
     if (popupBg) {
-        popupBg.onclick = function () {
-            for (let i = 1; i <= 3; i++) {
-                const popup = document.getElementById(`recommendPopup${i}`);
-                if (popup) popup.style.display = 'none';
+        popupBg.onclick = function (e) {
+            // 배경 클릭 시에만 닫기 (컨텐츠 클릭 시 닫히지 않음)
+            if (e.target === popupBg) {
+                closePopup();
             }
-            this.style.display = 'none';
-            if (popupCloseX) popupCloseX.style.display = 'none';
         };
-    } else {
-        console.error("Popup background element not found.");
     }
     if (popupCloseX) {
-        popupCloseX.onclick = function () {
-            for (let i = 1; i <= 3; i++) {
-                const popup = document.getElementById(`recommendPopup${i}`);
-                if (popup) popup.style.display = 'none';
-            }
-            if (popupBg) popupBg.style.display = 'none';
-            this.style.display = 'none';
-        };
-    } else {
-        console.error("Popup close button element not found.");
+        popupCloseX.onclick = closePopup;
     }
+
     console.log("Surf Info Website Loaded");
 });
-
-// 로딩 스타일 추가 (script.js 내에 직접 삽입)
-const style = document.createElement('style');
-style.innerHTML = `
-#loadingOverlay {
-    position: fixed; left:0; top:0; width:100vw; height:100vh; z-index:9999; display:none; align-items:center; justify-content:center;
-}
-#loadingOverlay .loading-bg {
-    position:absolute; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3);
-}
-#loadingOverlay .loading-popup {
-    position:relative; z-index:2; background:#fff; border-radius:12px; padding:40px 32px; box-shadow:0 4px 24px rgba(0,0,0,0.15); display:flex; flex-direction:column; align-items:center;
-}
-.loader {
-    border: 6px solid #f3f3f3;
-    border-top: 6px solid #3498db;
-    border-radius: 50%;
-    width: 48px;
-    height: 48px;
-    animation: spin 1s linear infinite;
-}
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-`;
-document.head.appendChild(style);

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
 </head>
+
 <body>
     <header>
         <div class="title-banner">
@@ -33,7 +35,8 @@
         <section class="hero-section">
             <div class="hero-section__container">
                 <div class="hero-section__img-wrap">
-                    <img src="https://images.unsplash.com/photo-1516633630673-67bbad747022?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="서핑 이미지">
+                    <img src="https://images.unsplash.com/photo-1516633630673-67bbad747022?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        alt="서핑 이미지">
                 </div>
                 <div class="hero-section__content">
                     <h2>최고의 서핑 포인트를 찾아보세요</h2>
@@ -43,8 +46,8 @@
                                 <input type="text" placeholder="날짜 선택 (캘린더)">
                             </div>
                         </div>
-                        <div class ="location-select">
-                             <select id="regionSelect">
+                        <div class="location-select">
+                            <select id="regionSelect">
                                 <option value="all">모든 지역</option>
                                 <option value="제주도">제주도</option>
                                 <option value="부산">부산</option>
@@ -67,22 +70,11 @@
             </div>
         </section>-->
 
-        <div class="popup-bg" id="popupBg" style="display:none;"></div>
-        <div class="popup-close-x" id="popupCloseX" style="display:none;">&times;</div>
-        <div class="recommend-popup" id="recommendPopup1">
-            <h3><a id="spotLink1" class="spot-link" href="#" target="_blank"></a></h3>
-            <img id="spotImg1" src="" alt="">
-            <p id="spotReason1"></p>
-        </div>
-        <div class="recommend-popup" id="recommendPopup2">
-            <h3><a id="spotLink2" class="spot-link" href="#" target="_blank"></a></h3>
-            <img id="spotImg2" src="" alt="">
-            <p id="spotReason2"></p>
-        </div>
-        <div class="recommend-popup" id="recommendPopup3">
-            <h3><a id="spotLink3" class="spot-link" href="#" target="_blank"></a></h3>
-            <img id="spotImg3" src="" alt="">
-            <p id="spotReason3"></p>
+        <div class="popup-bg" id="popupBg" style="display:none;">
+            <div class="popup-container" id="popupContainer">
+                <!-- Javascript로 동적 생성된 추천 카드들이 여기 들어갑니다 -->
+            </div>
+            <div class="popup-close-x" id="popupCloseX" style="display:none;">&times;</div>
         </div>
 
         <div class="location-section">
@@ -106,4 +98,5 @@
 
     <script src="js/script.js"></script>
 </body>
+
 </html>

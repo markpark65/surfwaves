@@ -1,66 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>낙산 해수욕장</title>
+  <title>낙산 해수욕장 - Surfly</title>
   <link rel="stylesheet" href="../css/style.css">
-  <!-- 필요시 추가 스타일 -->
-  <style>
-    /* 해수욕장 상세 정보 영역 */
-    .beach-info {
-      text-align: center;
-      padding: 40px 20px;
-    }
-    .beach-info img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 6px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .info-block {
-      margin-top: 20px;
-      font-size: 1.1rem;
-    }
-    /* 숙소, 서핑샵 섹션 */
-    .cards-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
-      margin: 40px 20px;
-    }
-    .card {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 16px;
-      width: 300px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      text-align: center;
-    }
-    .card img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 4px;
-    }
-    .card h4 {
-      margin-top: 12px;
-      font-size: 1.3rem;
-      color: #333;
-    }
-    .card p {
-      font-size: 0.95rem;
-      color: #555;
-    }
-    /* 섹션 헤더 */
-    .section-header {
-      text-align: center;
-      margin: 40px 0 20px;
-      font-size: 1.8rem;
-      color: #2196f3;
-    }
-  </style>
 </head>
+
 <body>
   <header>
     <div class="title-banner">
@@ -77,103 +24,81 @@
       </nav>
     </div>
   </header>
+
   <main>
-    <!-- 해수욕장 상세 정보 -->
     <section class="beach-info">
       <h2>낙산 해수욕장</h2>
-      <img src="../images/busan_naksan.jpg" alt="낙산 해수욕장">
+      <img src="../images/yangyang_naksan.jpg" alt="낙산 해수욕장">
       <div class="info-block">
-        <!-- API에서 받아온 데이터를 동적 할당. 값이 없으면 "없음" 표시 -->
-        <p><strong>파고:</strong> <span id="waveHeight">없음</span></p>
-        <p><strong>파주기:</strong> <span id="period">없음</span></p>
-        <p><strong>풍속:</strong> <span id="windSpeed">없음</span></p>
-        <p><strong>수온:</strong> <span id="waterTemp">없음</span></p>
-        <p><strong>서핑지수:</strong> <span id="surfIndex">없음</span></p>
+        <p><strong>파고:</strong> <span id="waveHeight">로딩중...</span></p>
+        <p><strong>파주기:</strong> <span id="period">로딩중...</span></p>
+        <p><strong>풍속:</strong> <span id="windSpeed">로딩중...</span></p>
+        <p><strong>수온:</strong> <span id="waterTemp">로딩중...</span></p>
+        <p><strong>서핑지수:</strong> <span id="surfIndex">로딩중...</span></p>
       </div>
     </section>
 
-    <!-- 숙소 정보 섹션 -->
-    <section>
-      <div class="section-header">추천 숙소</div>
-      <div class="cards-container">
-        <!-- 카드 1 -->
-        <div class="card">
-          <img src="../images/accommodation1.jpg" alt="숙소 1">
-          <h4>숙소 이름 1</h4>
-          <p>특징: 해변과 가까우며 편안한 시설을 갖춘 숙소입니다.</p>
-        </div>
-        <!-- 카드 2 -->
-        <div class="card">
-          <img src="../images/accommodation2.jpg" alt="숙소 2">
-          <h4>숙소 이름 2</h4>
-          <p>특징: 조용한 주변 환경과 현대적인 인테리어를 자랑합니다.</p>
-        </div>
-        <!-- 카드 3 -->
-        <div class="card">
-          <img src="../images/accommodation3.jpg" alt="숙소 3">
-          <h4>숙소 이름 3</h4>
-          <p>특징: 합리적인 가격에 쾌적한 객실을 제공합니다.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 서핑샵 정보 섹션 -->
     <section>
       <div class="section-header">추천 서핑샵</div>
       <div class="cards-container">
-        <!-- 카드 1 -->
         <div class="card">
-          <img src="../images/surfshop1.jpg" alt="서핑샵 1">
-          <h4>서핑샵 이름 1</h4>
-          <p>특징: 최신 장비와 친절한 서비스 제공.</p>
+          <img
+            src="https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20190521_98%2F1558425467385eg5aq_JPEG%2FCiA7Fr4v6qH4X_71zo0A7udm.jpg"
+            alt="양양서핑학교">
+          <h4>양양서핑학교</h4>
+          <p>체계적인 서핑 강습</p>
         </div>
-        <!-- 카드 2 -->
         <div class="card">
-          <img src="../images/surfshop2.jpg" alt="서핑샵 2">
-          <h4>서핑샵 이름 2</h4>
-          <p>특징: 다양한 서핑용 액세서리와 강습 프로그램 운영.</p>
+          <img
+            src="https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20240626_285%2F1719407456604fC88A_PNG%2FIMG_1510.png"
+            alt="서프호랑">
+          <h4>서프호랑</h4>
+          <p>낙산의 새로운 서핑 핫플레이스</p>
         </div>
-        <!-- 카드 3 -->
         <div class="card">
-          <img src="../images/surfshop3.jpg" alt="서핑샵 3">
-          <h4>서핑샵 이름 3</h4>
-          <p>특징: 해변 바로 앞 위치, 현지인 추천 서핑 전문점.</p>
+          <img
+            src="https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20240626_285%2F1719407456604fC88A_PNG%2FIMG_1510.png"
+            alt="킹콩서프">
+          <h4>킹콩서프</h4>
+          <p>에너지 넘치는 강사진</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-header">추천 숙소 (가성비)</div>
+      <div class="cards-container">
+        <div class="card">
+          <img
+            src="https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20180704_165%2F1530663005001nU2XD_JPEG%2F1503903227_in2.jpg"
+            alt="낙산비치호텔">
+          <h4>낙산비치호텔</h4>
+          <p>해수욕장 바로 앞, 10만원대 중후반, 깔끔한 시설</p>
+        </div>
+        <div class="card">
+          <img
+            src="https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20240704_159%2F1720087514889TAoLV_PNG%2F%25B1%25D7%25B6%25FB%25BA%25A3%25C0%25CC_%25C5%25F5%25BD%25C3%25B5%25B5.png"
+            alt="그랑베이 바이 쏘타스위트">
+          <h4>그랑베이 바이 쏘타스위트</h4>
+          <p>평점 9.1, 인피니티풀, 도보 1분, 13~14만원대</p>
+        </div>
+        <div class="card">
+          <img
+            src="https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20240906_198%2F1725602964951q4pJz_JPEG%2F%25BF%25DC%25B0%25FC_02.jpg"
+            alt="체스터톤스 낙산">
+          <h4>체스터톤스 낙산</h4>
+          <p>10~30만원, 도보 1분, 대규모 리조트</p>
         </div>
       </div>
     </section>
   </main>
+
   <footer>
-    <p>&copy; 2024 Surfly. All rights reserved.</p>
+    <p>&copy; 2025 Surfly. All rights reserved.</p>
   </footer>
 
-  <script>
-    // 예시: API 데이터를 받아와서 동적으로 할당하는 함수 (URL은 실제 API 엔드포인트로 수정)
-    function loadBeachInfo() {
-      // 예시 API 엔드포인트 (각 해수욕장에 맞게 설정)
-      const apiUrl = "http://localhost:4000/api/beach-data?beach=dadaepo"; 
-      fetch(apiUrl)
-        .then(res => res.json())
-        .then(data => {
-          // 예시: API에서 받은 데이터 객체의 필드를 사용 (없으면 "없음" 처리)
-          const wave = data.wave ? data.wave + "m" : "없음";
-          const period = data.period ? data.period + "s" : "없음";
-          const wind = data.wind ? data.wind + "m/s" : "없음";
-          const water = data.water ? data.water + "°C" : "없음";
-          const surfIndex = data.surfIndex ? data.surfIndex : "없음";
-
-          document.getElementById("waveHeight").textContent = wave;
-          document.getElementById("period").textContent = period;
-          document.getElementById("windSpeed").textContent = wind;
-          document.getElementById("waterTemp").textContent = water;
-          document.getElementById("surfIndex").textContent = surfIndex;
-        })
-        .catch(error => console.error('Error fetching beach data:', error));
-    }
-
-    // 페이지 로드 시 해수욕장 정보 자동으로 불러오기
-    document.addEventListener("DOMContentLoaded", function() {
-      loadBeachInfo();
-    });
-  </script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/detail.js"></script>
 </body>
+
 </html>
