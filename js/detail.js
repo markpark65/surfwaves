@@ -3,7 +3,7 @@
 
 // KMA API Fetcher (Duplicated from script.js for standalone safety)
 async function fetchKmaSurfDataForDetail(reqDate) {
-    const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=300`;
+    const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=900`;
     try {
         const res = await fetch(url);
         if (!res.ok) throw new Error("Network response was not ok");

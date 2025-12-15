@@ -51,7 +51,7 @@ function hideLoading() {
 
 // 기상청 서핑지수 API에서 전체 데이터 받아오기 (프록시 사용)
 async function fetchKmaSurfDataAll(reqDate) {
-    const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=2000`;
+    const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=900`;
     try {
         const res = await fetch(url);
         if (!res.ok) {
