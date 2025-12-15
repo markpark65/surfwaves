@@ -51,12 +51,31 @@ function hideLoading() {
 
 // 기상청 서핑지수 API에서 전체 데이터 받아오기 (프록시 사용)
 async function fetchKmaSurfDataAll(reqDate) {
+    const CACHE_KEY = `kmaData_${reqDate}`;
+    const CACHE_EXPIRY = 30 * 60 * 1000; // 30분
+
+    // 1. 캐시 확인
+    const cached = sessionStorage.getItem(CACHE_KEY);
+    if (cached) {
+        try {
+            const parsed = JSON.parse(cached);
+            if (Date.now() - parsed.timestamp < CACHE_EXPIRY) {
+                console.log("Using Cached KMA Data");
+                return parsed.data;
+            }
+        } catch (e) {
+            sessionStorage.removeItem(CACHE_KEY);
+        }
+    }
+
+    // 2. 데이터 없거나 만료됨 -> API 호출
     // 300은 안전한 API 제한 값.
     const url = `https://surfly.info/.netlify/functions/kmaSurfForcast?reqDate=${reqDate}&numOfRows=300`;
 
     try {
         const res = await fetch(url);
         const json = await res.json();
+
 
         // 에러 체크
         if (json.error) {
